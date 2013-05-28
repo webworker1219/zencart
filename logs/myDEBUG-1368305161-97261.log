@@ -1,0 +1,9 @@
+[11-May-2013 20:46:03 UTC] PHP Warning:  preg_replace(): Unknown modifier '2' in D:\xampp\htdocs\zencart\includes\modules\main_product_image.php on line 21
+[11-May-2013 20:46:03 UTC] PHP Stack trace:
+[11-May-2013 20:46:03 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\index.php:0
+[11-May-2013 20:46:03 UTC] PHP   2. require() D:\xampp\htdocs\zencart\index.php:117
+[11-May-2013 20:46:03 UTC] PHP   3. require() D:\xampp\htdocs\zencart\includes\templates\pure_red_free\common\tpl_main_page.php:79
+[11-May-2013 20:46:03 UTC] PHP   4. require() D:\xampp\htdocs\zencart\includes\modules\pages\product_info\main_template_vars.php:178
+[11-May-2013 20:46:03 UTC] PHP   5. require() D:\xampp\htdocs\zencart\includes\templates\pure_red_free\templates\tpl_product_info_display.php:60
+[11-May-2013 20:46:03 UTC] PHP   6. require() D:\xampp\htdocs\zencart\includes\templates\template_default\templates\tpl_modules_main_product_image.php:12
+[11-May-2013 20:46:03 UTC] PHP   7. preg_replace(*uninitialized*, *uninitialized*, *uninitialized*) D:\xampp\htdocs\zencart\includes\modules\main_product_image.php:21

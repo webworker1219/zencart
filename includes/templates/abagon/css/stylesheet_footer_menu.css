@@ -1,0 +1,114 @@
+#footer {
+	clear:both;
+	margin: 0;
+	background: url("../images/footer_bg_right.gif") repeat-y right 0;
+}
+.center-bottom-bg {
+	background: url("../images/center_bottom_bg.png") no-repeat center top;
+	height: 18px;
+}
+.bottom-up {
+	height: 10px;
+	background: red;
+}
+
+.bottom-columns {
+	padding: 17px 20px 19px 14px;
+	clear: both;
+	width: 100%;
+	color: #323232;
+	* margin: 17px 20px 17px 10px;
+	* display: inline;
+}
+
+.bottom-columns .column {
+	margin: 0;
+	padding: 0 0 0 15px;
+	font: normal 1em arial;
+	color: #575757;
+	width: 25%; /*Column width of the menu - currently set for 4 columns*/
+	vertical-align: top;
+}
+
+.bottom-columns .column + .column,
+.bottom-columns .menuTitle + .menuTitle {
+	background: url("../images/footer_separator.gif") repeat-y 0 0;
+}
+.menuTitle {
+	margin: 0;
+	padding: 0 0 0.3em 15px;
+	text-align: left;
+	font: bold 1em arial;
+	color: #313131;
+	text-shadow: 0 1px #f5f4f0;
+}
+.first, .second, .third {
+	/* border-right: 1px solid #e2e2e2; */
+}
+#siteinfoLegal, #siteinfoIP {
+    margin:12px 0 12px 4px;
+	padding: 0;
+	font-size: 12px;
+	text-align:center;
+	line-height: normal;
+	color: #606060;
+	float: left;
+	text-shadow: 1px 1px #EFEBDF;
+}
+.bottom-wrapper {
+	background: url("../images/shadow_bottom.png") repeat-x 0 0;
+}
+.bottom-wrapper, .bottom-wrapper a, .bottom-wrapper a:link, .bottom-wrapper a:visited {
+	color: #606060;
+	text-shadow: 1px 1px #EFEBDF;
+}
+.bottom-wrapper a:hover{
+	text-decoration: underline;
+}
+#navSuppWrapper {
+	margin: 0;
+	padding: 0 0 1px 0;
+	font-weight: normal;
+	background: url("../images/footer_rb.gif") no-repeat right bottom;
+}
+
+#footer ul {
+	margin: 0;
+	padding:0;
+	list-style: none;
+}
+#footer li a {
+	font-weight: normal;
+	margin: 0;
+	padding: 2px 0 3px 11px;
+	background: url("../images/dots.gif") no-repeat left 7px;
+	color: #575757;
+	line-height: 14px;
+	display: inline-block;
+	text-shadow: 1px 1px #f2f1ed;
+}
+#footer li a:hover {
+    text-decoration: underline;
+}
+
+.footer-links {
+	margin: 12px 4px 2px 0;
+	text-align: center;
+}
+.footer-links li {
+	/*text-shadow: 1px 1px #eceded;*/
+	font: normal 1em arial;
+	display: inline;
+	margin: 0 6px 0 6px;
+}
+#lt_corner {
+	background: url("../images/footer_lt.gif") no-repeat 0 0;
+}
+
+#rt_corner {
+	background: url("../images/footer_rt.gif") no-repeat right 0;
+}
+
+#lb_corner {
+	background: url("../images/footer_lb.gif") no-repeat left bottom;
+}

@@ -1,0 +1,41 @@
+##### NOTE: Replace /shop/ with the relative web path of your catalog in the "Rewrite Base" line below:
+
+Options +FollowSymLinks
+RewriteEngine on
+RewriteBase /shop/
+
+# Disable if using "Categories as Directories"
+#RewriteRule ^(.*)-c-([0-9_]+)/(.*)-p-([0-9]+)\.html$ $3-p-$4\.html?cPath=$2&%{QUERY_STRING} [R=301,L]
+
+# Enable only if using "Categories as Directories"
+RewriteRule ^(.*)-c-([0-9_]+)/(.*)-p-([0-9]+)\.html$ index\.php?main_page=product_info&products_id=$4&cpath=$2&%{QUERY_STRING} [L]
+
+# Normal operation Ultimate SEO URLs
+RewriteRule ^(.*)-p-([0-9]+)\.html$ index\.php?main_page=product_info&products_id=$2&%{QUERY_STRING} [L]
+
+# Disable if using "Categories as Directories"
+#RewriteRule ^(.*)-c-([0-9_]+)\.html$ index\.php?main_page=index&cPath=$2&%{QUERY_STRING} [L]
+#RewriteRule ^(.*)-c-([0-9_]+)/$ $1-c-$2\.html [R=301,L]
+
+# Enable only if using "Categories as Directories"
+RewriteRule ^(.*)-c-([0-9_]+)/?\.html$ $1-c-$2/ [R=301,L]
+RewriteRule ^(.*)-c-([0-9_]+)$ %{REQUEST_URI}/ [R=301,L]
+RewriteRule ^(.*)-c-([0-9_]+)/$ index\.php?main_page=index&cPath=$2&%{QUERY_STRING} [L]
+
+# Normal operation Ultimate SEO URLs
+RewriteRule ^(.*)-m-([0-9]+)\.html$ index\.php?main_page=index&manufacturers_id=$2&%{QUERY_STRING} [L]
+RewriteRule ^(.*)-pi-([0-9]+)\.html$ index\.php?main_page=popup_image&pID=$2&%{QUERY_STRING} [L]
+RewriteRule ^(.*)-pr-([0-9]+)\.html$ index\.php?main_page=product_reviews&products_id=$2&%{QUERY_STRING} [L]
+RewriteRule ^(.*)-pri-([0-9]+)\.html$ index\.php?main_page=product_reviews_info&products_id=$2&%{QUERY_STRING} [L]
+RewriteRule ^(.*)-ezp-([0-9]+)\.html$ index\.php?main_page=page&id=$2&%{QUERY_STRING} [L]
+
+# All other pages
+# Don't rewrite real files or directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*).html$ index\.php?main_page=$1&%{QUERY_STRING} [L]
+
+# Handle when a resource is not found (404 Error Page)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index\.php?main_page=page_not_found&%{QUERY_STRING} [L]

@@ -1,0 +1,4 @@
+[13-May-2013 17:44:37 UTC] PHP Warning:  preg_replace(): Unknown modifier '2' in D:\xampp\htdocs\zencart\myadmin\image_handler.php on line 575
+[13-May-2013 17:44:37 UTC] PHP Stack trace:
+[13-May-2013 17:44:37 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\image_handler.php:0
+[13-May-2013 17:44:37 UTC] PHP   2. preg_replace(*uninitialized*, *uninitialized*, *uninitialized*) D:\xampp\htdocs\zencart\myadmin\image_handler.php:575

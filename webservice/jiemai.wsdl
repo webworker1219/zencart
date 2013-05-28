@@ -1,0 +1,334 @@
+<wsdl:definitions targetNamespace="com.jmservice.uswebservice" xmlns:ns1="http://vo.uswebservice.jmservice.com" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="com.jmservice.uswebservice" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="com.jmservice.uswebservice">
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getProductInventory">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="ArrayOfArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ArrayOfString" nillable="true" type="tns:ArrayOfString"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getProductInventoryResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ProductDetailResult"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getProductDetail">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getProductDetailResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ProductDetailResult"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryProduct">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:ProductCondition"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:int"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" type="xsd:int"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in4" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryProductResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ProductListResult"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryUpdatedProduct">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="in0" nillable="true" type="xsd:string"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in1" nillable="true" type="ns1:ProductCondition"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in2" type="xsd:int"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in3" type="xsd:int"/>
+<xsd:element maxOccurs="1" minOccurs="1" name="in4" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="queryUpdatedProductResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:ProductListResult"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://vo.uswebservice.jmservice.com">
+<xsd:complexType name="ProductDetailResult">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="message" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="productDetail" nillable="true" type="ns1:ArrayOfProductDetail"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfProductDetail">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ProductDetail" nillable="true" type="ns1:ProductDetail"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ProductDetail">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="categoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="categoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="categoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="enname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="feeDesc" nillable="true" type="ns1:ArrayOfFeeDesc"/>
+<xsd:element minOccurs="0" name="height" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="length" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="picInfo" nillable="true" type="ns1:ArrayOfPicInfo"/>
+<xsd:element minOccurs="0" name="pkWeight" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="price" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="priceUSD" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="productDesc" nillable="true" type="ns1:ArrayOfProductDesc"/>
+<xsd:element minOccurs="0" name="producturl" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="secondaryCategoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="secondaryCategoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="secondaryCategoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sku" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="specification" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="stockNum" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="topCategoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="topCategoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="topCategoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="uomname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="weight" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="whCode" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="width" nillable="true" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfFeeDesc">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="FeeDesc" nillable="true" type="ns1:FeeDesc"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="FeeDesc">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="dpCountry" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpEnCountry" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpfee" nillable="true" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfPicInfo">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="PicInfo" nillable="true" type="ns1:PicInfo"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="PicInfo">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="imageBurl" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="imageMurl" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="imageSurl" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfProductDesc">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ProductDesc" nillable="true" type="ns1:ProductDesc"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ProductDesc">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="desc" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="language" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="property" nillable="true" type="tns:ArrayOfArrayOfString"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ProductCondition">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="categoryid" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="country" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="endPrice" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="endPutawayDate" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sku" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sort" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="startPrice" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="startPutawayDate" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="suitEbay" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="usrUuid" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="whCode" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ProductListResult">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="baseInfo" nillable="true" type="ns1:ArrayOfProductBaseInfo"/>
+<xsd:element minOccurs="0" name="message" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="total" type="xsd:int"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfProductBaseInfo">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="ProductBaseInfo" nillable="true" type="ns1:ProductBaseInfo"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ProductBaseInfo">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="categoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="categoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="categoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="cnname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpCountry" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpEnCountry" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="dpfee" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="enname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="height" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="imageurl" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="length" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="pkWeight" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="price" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="priceUSD" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="producturl" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="secondaryCategoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="secondaryCategoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="secondaryCategoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="sku" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="stockNum" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="topCategoryEnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="topCategoryId" nillable="true" type="xsd:int"/>
+<xsd:element minOccurs="0" name="topCategoryName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="uomname" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="weight" nillable="true" type="xsd:double"/>
+<xsd:element minOccurs="0" name="whCnName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="whCode" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="whName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="width" nillable="true" type="xsd:double"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getProductDetailResponse">
+    <wsdl:part name="parameters" element="tns:getProductDetailResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductDetailRequest">
+    <wsdl:part name="parameters" element="tns:getProductDetail">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductInventoryRequest">
+    <wsdl:part name="parameters" element="tns:getProductInventory">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryUpdatedProductResponse">
+    <wsdl:part name="parameters" element="tns:queryUpdatedProductResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryUpdatedProductRequest">
+    <wsdl:part name="parameters" element="tns:queryUpdatedProduct">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryProductResponse">
+    <wsdl:part name="parameters" element="tns:queryProductResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductInventoryResponse">
+    <wsdl:part name="parameters" element="tns:getProductInventoryResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryProductRequest">
+    <wsdl:part name="parameters" element="tns:queryProduct">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UsJieMaiSlServicePortType">
+    <wsdl:operation name="getProductInventory">
+      <wsdl:input name="getProductInventoryRequest" message="tns:getProductInventoryRequest">
+    </wsdl:input>
+      <wsdl:output name="getProductInventoryResponse" message="tns:getProductInventoryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductDetail">
+      <wsdl:input name="getProductDetailRequest" message="tns:getProductDetailRequest">
+    </wsdl:input>
+      <wsdl:output name="getProductDetailResponse" message="tns:getProductDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="queryProduct">
+      <wsdl:input name="queryProductRequest" message="tns:queryProductRequest">
+    </wsdl:input>
+      <wsdl:output name="queryProductResponse" message="tns:queryProductResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="queryUpdatedProduct">
+      <wsdl:input name="queryUpdatedProductRequest" message="tns:queryUpdatedProductRequest">
+    </wsdl:input>
+      <wsdl:output name="queryUpdatedProductResponse" message="tns:queryUpdatedProductResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UsJieMaiSlServiceHttpBinding" type="tns:UsJieMaiSlServicePortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getProductInventory">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getProductInventoryRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductInventoryResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductDetail">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getProductDetailRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductDetailResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="queryProduct">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="queryProductRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryProductResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="queryUpdatedProduct">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="queryUpdatedProductRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryUpdatedProductResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UsJieMaiSlService">
+    <wsdl:port name="UsJieMaiSlServiceHttpPort" binding="tns:UsJieMaiSlServiceHttpBinding">
+      <wsdlsoap:address location="http://query.jiemai.com/services/UsJieMaiSlService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

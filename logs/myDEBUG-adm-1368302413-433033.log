@@ -1,0 +1,19 @@
+[11-May-2013 20:00:14 UTC] PHP Warning:  strip_tags() expects parameter 1 to be string, array given in D:\xampp\htdocs\zencart\myadmin\includes\init_includes\init_general_funcs.php on line 52
+[11-May-2013 20:00:14 UTC] PHP Stack trace:
+[11-May-2013 20:00:14 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\jmw_return.php:0
+[11-May-2013 20:00:14 UTC] PHP   2. require() D:\xampp\htdocs\zencart\myadmin\jmw_return.php:9
+[11-May-2013 20:00:14 UTC] PHP   3. require() D:\xampp\htdocs\zencart\myadmin\includes\application_top.php:147
+[11-May-2013 20:00:14 UTC] PHP   4. require() D:\xampp\htdocs\zencart\includes\autoload_func.php:48
+[11-May-2013 20:00:14 UTC] PHP   5. strip_tags(*uninitialized*) D:\xampp\htdocs\zencart\myadmin\includes\init_includes\init_general_funcs.php:52
+[11-May-2013 20:01:15 UTC] PHP SoapFault:  Error Fetching http headers in D:\xampp\htdocs\zencart\myadmin\jmw_return.php on line 89
+[11-May-2013 20:01:15 UTC] PHP Stack trace:
+[11-May-2013 20:01:15 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\jmw_return.php:0
+[11-May-2013 20:01:15 UTC] PHP   2. handle_add_fail_products($products_sku_String = *uninitialized*, $add_to_categories = *uninitialized*, $price_rate_custom = *uninitialized*) D:\xampp\htdocs\zencart\myadmin\jmw_return.php:450
+[11-May-2013 20:01:15 UTC] PHP   3. SoapClient->__call(*uninitialized*, *uninitialized*) D:\xampp\htdocs\zencart\myadmin\jmw_return.php:89
+[11-May-2013 20:01:15 UTC] PHP Fatal error:  Uncaught SoapFault exception: [HTTP] Error Fetching http headers in D:\xampp\htdocs\zencart\myadmin\jmw_return.php:89
+Stack trace:
+#0 [internal function]: SoapClient->__doRequest('<?xml version="...', 'http://query.ji...', '', 1, 0)
+#1 D:\xampp\htdocs\zencart\myadmin\jmw_return.php(89): SoapClient->__call('getProductDetai...', Array)
+#2 D:\xampp\htdocs\zencart\myadmin\jmw_return.php(450): handle_add_fail_products('902652-TIE0016-...', '1', NULL)
+#3 {main}
+  thrown in D:\xampp\htdocs\zencart\myadmin\jmw_return.php on line 89

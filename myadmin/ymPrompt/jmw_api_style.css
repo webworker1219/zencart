@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+
+.text_underline_cursor{
+	text-decoration:underline;cursor:pointer;
+}
+.buttom_submit_button{
+	float:right; padding-right:5px;
+}
+.buttom_clear_div{
+	clear:both; width:100%; height:1px; overflow:hidden;
+}
+#show_add_products_loading{
+	height:30px;
+}
+.page{height:50px;line-height:50px;font-weight:bold;}
+.buttom_page_span{
+	float:left;text-algin:right;width:auto; padding-right:10px; margin-left:10px;
+}
+.buttom_page_span span{padding-left:10px;}
+.buttom_page_span span.key{color:#06C;padding:0;}
