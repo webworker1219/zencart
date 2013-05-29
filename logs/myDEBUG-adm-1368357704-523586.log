@@ -1,6 +1,0 @@
-[12-May-2013 11:21:45 UTC] PHP Warning:  preg_replace(): Unknown modifier '2' in D:\xampp\htdocs\zencart\myadmin\includes\functions\general.php on line 1377
-[12-May-2013 11:21:45 UTC] PHP Stack trace:
-[12-May-2013 11:21:45 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\product.php:0
-[12-May-2013 11:21:45 UTC] PHP   2. require() D:\xampp\htdocs\zencart\myadmin\product.php:43
-[12-May-2013 11:21:45 UTC] PHP   3. zen_remove_product($product_id = *uninitialized*, $ptc = *uninitialized*) D:\xampp\htdocs\zencart\myadmin\includes\modules\delete_product_confirm.php:61
-[12-May-2013 11:21:45 UTC] PHP   4. preg_replace(*uninitialized*, *uninitialized*, *uninitialized*) D:\xampp\htdocs\zencart\myadmin\includes\functions\general.php:1377

@@ -1,3 +1,0 @@
-[12-May-2013 07:52:11 UTC] PHP Warning:  Creating default object from empty value in D:\xampp\htdocs\zencart\myadmin\categories.php on line 992
-[12-May-2013 07:52:11 UTC] PHP Stack trace:
-[12-May-2013 07:52:11 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\categories.php:0

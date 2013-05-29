@@ -1,6 +1,0 @@
-[11-May-2013 17:25:35 UTC] PHP Warning:  Creating default object from empty value in D:\xampp\htdocs\zencart\myadmin\products_price_manager.php on line 476
-[11-May-2013 17:25:35 UTC] PHP Stack trace:
-[11-May-2013 17:25:35 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\products_price_manager.php:0
-[11-May-2013 17:25:35 UTC] PHP Warning:  Creating default object from empty value in D:\xampp\htdocs\zencart\myadmin\products_price_manager.php on line 482
-[11-May-2013 17:25:35 UTC] PHP Stack trace:
-[11-May-2013 17:25:35 UTC] PHP   1. {main}() D:\xampp\htdocs\zencart\myadmin\products_price_manager.php:0
