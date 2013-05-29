@@ -14,7 +14,7 @@ if (!defined('IS_ADMIN_FLAG'))
 // added defines for header alt and text
 define('BOX_CATALOG_JMW_API', '借卖网-产品管理');
 define('BOX_CUSTOMERS_SEND_ORDERS', '借卖网订单');
-
+define('cloudtest', 'testtest');
 define('HEADER_ALT_TEXT', 'Zen Cart 管理中心');
 define('HEADER_LOGO_WIDTH', '125px');
 define('HEADER_LOGO_HEIGHT', '50px');
