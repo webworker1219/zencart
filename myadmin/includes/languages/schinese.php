@@ -11,11 +11,10 @@ if (!defined('IS_ADMIN_FLAG'))
   die('Illegal Access');
 }
 
+// added defines for header alt and text
 define('BOX_CATALOG_JMW_API', '借卖网-产品管理');
 define('BOX_CUSTOMERS_SEND_ORDERS', '借卖网订单');
 
-
-// added defines for header alt and text
 define('HEADER_ALT_TEXT', 'Zen Cart 管理中心');
 define('HEADER_LOGO_WIDTH', '125px');
 define('HEADER_LOGO_HEIGHT', '50px');
@@ -118,6 +117,7 @@ define('BOX_CONFIGURATION_INDEX_LISTING', '商品索引');
 define('BOX_CONFIGURATION_DEFINE_PAGE_STATUS', '定义页面');
 define('BOX_CONFIGURATION_EZPAGES_SETTINGS', '简易页面设置');
 define('BOX_CONFIGURATION_EASY_POPULATE', '批量商品管理');
+define('BOX_CONFIGURATION_CACHE', '缓存');
 
 // modules box text
 define('BOX_HEADING_MODULES', '模块管理');
@@ -168,6 +168,7 @@ define('BOX_REPORTS_CUSTOMERS_REFERRALS', '客户推荐');
 
 // tools text
 define('BOX_HEADING_TOOLS', '工具');
+define('BOX_TOOLS_ADMIN', '管理设置');
 define('BOX_TOOLS_TEMPLATE_SELECT', '模板选择');
 define('BOX_TOOLS_BACKUP', '数据库备份');
 define('BOX_TOOLS_BANNER_MANAGER', '广告管理');
@@ -250,6 +251,7 @@ define('JS_STATE_SELECT', '-- 选择 --');
 define('JS_ZONE', '* \'省份\'一栏要从该国家的列表中选取.');
 define('JS_COUNTRY', '* \'国家\'是必选项.\n');
 define('JS_TELEPHONE', '* \'电话号码\'一栏至少要有' . ENTRY_TELEPHONE_MIN_LENGTH . '个字符。\n');
+define('JS_PASSWORD', '* \'密码\' 和 \'密码确认\' 栏必须一致而且不少于' . ENTRY_PASSWORD_MIN_LENGTH . '个字符。\n');
 
 define('JS_ORDER_DOES_NOT_EXIST', '订单号%s不存在!');
 
@@ -517,6 +519,7 @@ define('NOT_INSTALLED_TEXT','没有安装');
   define('IMAGE_GIFT_QUEUE', TEXT_GV_NAME . '队列');
   define('IMAGE_ORDER','订单');
 
+  define('BOX_TOOLS_EMAIL_WELCOME','欢迎邮件');
   define('IMAGE_DISPLAY','显示');
   define('IMAGE_UPDATE_SORT','更新排序');
   define('IMAGE_EDIT_PRODUCT','编辑商品');
@@ -723,6 +726,12 @@ define('TEXT_EMAIL', '邮件地址');
 define('TEXT_NOEMAIL', '无邮件地址');
 
 define('BOX_HEADING_PRODUCT_TYPES', '商品类型');
+  define('PRODUCT_MEDIUM_SMALL_WIDTH','150');
+  define('PRODUCT_MEDIUM_SMALL_HEIGHT','150');
+  define('PRODUCT_MEDIUM_IMAGE_WIDTH','282');
+  define('PRODUCT_MEDIUM_IMAGE_HEIGHT','282');
+  define('PRODUCT_MEDIUM_LARGE_WIDTH','500');
+  define('PRODUCT_MEDIUM_LARGE_HEIGHT','500');
 
 ///////////////////////////////////////////////////////////
 // include additional files:

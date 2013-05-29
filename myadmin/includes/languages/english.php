@@ -11,11 +11,10 @@ if (!defined('IS_ADMIN_FLAG'))
   die('Illegal Access');
 }
 
+// added defines for header alt and text
 define('BOX_CATALOG_JMW_API', '借卖网-产品管理');
 define('BOX_CUSTOMERS_SEND_ORDERS', '借卖网订单');
 
-
-// added defines for header alt and text
 define('HEADER_ALT_TEXT', 'Admin Powered by Zen Cart :: The Art of E-Commerce');
 define('HEADER_LOGO_WIDTH', '125px');
 define('HEADER_LOGO_HEIGHT', '50px');
@@ -118,6 +117,7 @@ define('BOX_CONFIGURATION_INDEX_LISTING', 'Index Listing');
 define('BOX_CONFIGURATION_DEFINE_PAGE_STATUS', 'Define Page Status');
 define('BOX_CONFIGURATION_EZPAGES_SETTINGS', 'EZ-Pages Settings');
 define('BOX_CONFIGURATION_EASY_POPULATE', 'Easy Populate');
+define('BOX_CONFIGURATION_CACHE', 'Cache');
 
 // modules box text
 define('BOX_HEADING_MODULES', 'Modules');
@@ -168,6 +168,7 @@ define('BOX_REPORTS_CUSTOMERS_REFERRALS', 'Customers Referral');
 
 // tools text
 define('BOX_HEADING_TOOLS', 'Tools');
+define('BOX_TOOLS_ADMIN', 'Admin Settings');
 define('BOX_TOOLS_TEMPLATE_SELECT', 'Template Selection');
 define('BOX_TOOLS_BACKUP', 'Database Backup');
 define('BOX_TOOLS_BANNER_MANAGER', 'Banner Manager');
@@ -250,6 +251,7 @@ define('JS_STATE_SELECT', '-- Select Above --');
 define('JS_ZONE', '* The \'State\' entry must be selected from the list for this country.');
 define('JS_COUNTRY', '* The \'Country\' value must be chosen.\n');
 define('JS_TELEPHONE', '* The \'Telephone Number\' entry must have at least ' . ENTRY_TELEPHONE_MIN_LENGTH . ' characters.\n');
+define('JS_PASSWORD', '* The \'Password\' and \'Confirmation\' entries must match and have at least ' . ENTRY_PASSWORD_MIN_LENGTH . ' characters.\n');
 
 define('JS_ORDER_DOES_NOT_EXIST', 'Order Number %s does not exist!');
 
@@ -361,6 +363,7 @@ define('IMAGE_UPDATE_CURRENCIES', 'Update Exchange Rate');
 define('IMAGE_UPLOAD', 'Upload');
 define('IMAGE_TAX_RATES', 'Tax Rate');
 define('IMAGE_DEFINE_ZONES', 'Define Zones');
+define('IMAGE_PERMISSIONS', 'Edit Permissions');
 define('IMAGE_PRODUCTS_PRICE_MANAGER', 'Products Price Manager');
 define('IMAGE_UPDATE_PRICE_CHANGES', 'Update Price Changes');
 define('IMAGE_ADD_BLANK_DISCOUNTS','Add ' . DISCOUNT_QTY_ADD . ' Blank Discount Qty');
@@ -517,6 +520,7 @@ define('NOT_INSTALLED_TEXT','Not Installed');
   define('IMAGE_GIFT_QUEUE', TEXT_GV_NAME . ' Queue');
   define('IMAGE_ORDER','Order');
 
+  define('BOX_TOOLS_EMAIL_WELCOME','Email Welcome');
   define('IMAGE_DISPLAY','Display');
   define('IMAGE_UPDATE_SORT','Update Sort Order');
   define('IMAGE_EDIT_PRODUCT','Edit Product');

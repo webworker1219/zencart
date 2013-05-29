@@ -13,8 +13,8 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
   if (IS_ADMIN_FLAG === true) {
-    if (!$SESS_LIFE = (SESSION_TIMEOUT_ADMIN > 900 ? 9000 : SESSION_TIMEOUT_ADMIN)) {
-      $SESS_LIFE = (SESSION_TIMEOUT_ADMIN > 900 ? 9000 : SESSION_TIMEOUT_ADMIN);
+    if (!$SESS_LIFE = (SESSION_TIMEOUT_ADMIN > 90 ? 9000 : SESSION_TIMEOUT_ADMIN)) {
+      $SESS_LIFE = (SESSION_TIMEOUT_ADMIN > 90 ? 9000 : SESSION_TIMEOUT_ADMIN);
     }
   } else {
     if (!$SESS_LIFE = get_cfg_var('session.gc_maxlifetime')) {
@@ -104,7 +104,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     @ini_set('session.gc_probability', 1);
     @ini_set('session.gc_divisor', 2);
     if (IS_ADMIN_FLAG === true) {
-      @ini_set('session.gc_maxlifetime', (SESSION_TIMEOUT_ADMIN > 900 ? 900 : SESSION_TIMEOUT_ADMIN));
+      @ini_set('session.gc_maxlifetime', (SESSION_TIMEOUT_ADMIN > 90 ? 9000 : SESSION_TIMEOUT_ADMIN));
     }
   	if (preg_replace('/[a-zA-Z0-9]/', '', session_id()) != '')
   	{

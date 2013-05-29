@@ -14,12 +14,14 @@
  * define project filenames
  */
  
-
-define('FILENAME_JMW_API', 'jmw_api');
+ define('FILENAME_JMW_API', 'jmw_api');
 define('FILENAME_JMW_ADD_PRODUCTS', 'jmw_add_products');
 define('FILENAME_JMW_SEND_ORDERS', 'jmw_send_orders');
 define('FILENAME_API', 'api');
-
+ 
+ 
+ 
+ 
 define('FILENAME_ACCOUNT', 'account');
 define('FILENAME_ACCOUNT_EDIT', 'account_edit');
 define('FILENAME_ACCOUNT_HISTORY', 'account_history');
@@ -35,6 +37,7 @@ define('FILENAME_ADMIN_PAGE_REGISTRATION', 'admin_page_registration');
 define('FILENAME_ADVANCED_SEARCH', 'advanced_search');
 define('FILENAME_ADVANCED_SEARCH_RESULT', 'advanced_search_result');
 define('FILENAME_ALT_NAV', 'alt_nav');
+define('FILENAME_API', 'api');
 define('FILENAME_ALERT_PAGE', 'alert_page');
 define('FILENAME_ATTRIBUTES', 'attributes');
 define('FILENAME_ATTRIBUTES_CONTROLLER', 'attributes_controller');
@@ -64,6 +67,7 @@ define('FILENAME_CREATE_ACCOUNT_SUCCESS', 'create_account_success');
 define('FILENAME_CURRENCIES', 'currencies');
 define('FILENAME_CUSTOMERS', 'customers');
 define('FILENAME_DEFAULT', 'index');
+define('FILENAME_CATEGORY_ICON_DISPLAY', 'category_icon_display');
 define('FILENAME_DEFINE_PAGES_EDITOR', 'define_pages_editor');
 define('FILENAME_DEFINE_MAIN_PAGE', 'define_main_page');
 define('FILENAME_DEFINE_CHECKOUT_SUCCESS', 'define_checkout_success');
@@ -84,6 +88,7 @@ define('FILENAME_DISCOUNT_COUPON', 'discount_coupon');
 define('FILENAME_DOWNLOAD', 'download');
 define('FILENAME_DOWNLOAD_TIME_OUT','download_time_out');
 define('FILENAME_DOWNLOADS_MANAGER','downloads_manager');
+define('FILENAME_EMAIL_WELCOME','email_welcome');
 define('FILENAME_EZPAGES', 'page');
 define('FILENAME_EZPAGES_ADMIN', 'ezpages');
 define('FILENAME_GEO_ZONES', 'geo_zones');
@@ -167,6 +172,7 @@ define('FILENAME_STATS_PRODUCTS_LOWSTOCK', 'stats_products_lowstock');
 define('FILENAME_STORE_MANAGER', 'store_manager');
 define('FILENAME_TAX_CLASSES', 'tax_classes');
 define('FILENAME_TAX_RATES', 'tax_rates');
+define('FILENAME_TELL_A_FRIEND', 'tell_a_friend');
 define('FILENAME_TEMPLATE_SELECT', 'template_select');
 define('FILENAME_TIME_OUT','time_out');
 define('FILENAME_UNSUBSCRIBE', 'unsubscribe');
@@ -193,6 +199,7 @@ define('FILENAME_PREV_NEXT_DISPLAY', 'products_previous_next_display.php');
 define('FILENAME_PRODUCT_LISTING', 'product_listing.php');
 define('FILENAME_PRODUCTS_DISCOUNT_PRICES','products_discount_prices.php');
 define('FILENAME_SPECIALS_INDEX', 'specials_index.php');
+define('FILENAME_BEST_SELLERS_INDEX', 'best_sellers_index.php');
 define('FILENAME_UPCOMING_PRODUCTS', 'upcoming_products.php');
 
 define('FILENAME_BB_INDEX', 'index.php'); // phpBB main index filename

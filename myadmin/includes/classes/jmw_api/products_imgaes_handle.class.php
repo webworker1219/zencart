@@ -116,13 +116,14 @@ if(sizeof($jmwimagearr)<=0) return '';
 if(!empty($jmwimagearr->imageBurl)) {
 	$handle_image = array($jmwimagearr->imageBurl);
 }else{
-	foreach ($jmwimagearr as $_k => $_imageobj){$url_images_string.=$_imageobj->imageBurl.',';}
+	foreach ($jmwimagearr as $_k => $_imageobj){
+		$url_images_string.=$_imageobj->imageBurl.',';
+	}
 	if(!empty($url_images_string)) $url_images_string =substr($url_images_string,0,-1);
 	$handle_image=explode(',',$url_images_string);
 }
 //echo '<span style="color:#ff0000">jmw images - > '.print_r($jmwimagearr,true).'</span><br /> ' ;
 if(!empty($handle_image)){
-
 	for($i=0;$i<sizeof($handle_image);$i++){
 		//$file_whether=@file_get_contents($handle_image[$i]);
 		//if(!empty($file_whether)){
@@ -142,23 +143,32 @@ $wateralpha = 65;
 if (!empty($fileArray)) {
     $data = array();
 	$foldDate = date('Ym') ;
-	$tempfile1 = DIR_FS_CATALOG_IMAGES . 's/'.$foldDate.'/temp.txt' ;
-	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'l/'.$foldDate.'/temp.txt' ;
-	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
+//	$tempfile1 = DIR_FS_CATALOG_IMAGES . 's/'.$foldDate.'/temp.txt' ;
+//	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'l/'.$foldDate.'/temp.txt' ;
+//	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
+
+
+	$tempfile1 = DIR_FS_CATALOG_IMAGES .$foldDate.'/temp.txt' ;
+	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'medium/'.$foldDate.'/temp.txt' ;
+	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'large/'.$foldDate.'/temp.txt' ;
 	
 	io_makeFileDir($tempfile1);
 	io_makeFileDir($tempfile2);
 	io_makeFileDir($tempfile3);
-	
+	$nameBase = $foldDate.'/'.time().$i;
     for($i = 0; $i < count ( $fileArray ); $i ++) {
 	    set_time_limit(1200);
-        $nameBase = $foldDate.'/'.time().$i;
-		
+        
+//		$nameBase = $foldDate.'/'.time().$i;
         $data['ImgExtension'] = strtolower(substr( $fileArray[$i]['name'], strrpos($fileArray[$i]['name'], '.')));
         $source_name = $fileArray[$i]['tmp_name'];
        
-        $destination_name = DIR_FS_CATALOG_IMAGES . 's/'.$nameBase . $data['ImgExtension'];
-        
+//      $destination_name = DIR_FS_CATALOG_IMAGES . 's/'.$nameBase . $data['ImgExtension'];
+		if($i==0){
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase . $data['ImgExtension'];
+		}else{
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase.'_0'.$i . $data['ImgExtension'];
+		}
         if ( !loadRemoteImg($source_name, $destination_name) ) {
           //echo ('failed to copy '.$source_name.' to '.$destination_name.'...'. "error<br />" );
         }else{
@@ -166,9 +176,13 @@ if (!empty($fileArray)) {
         }
 		
 		
-        $data['smallFileName'] = 's/'.$nameBase . $data['ImgExtension'];
-        $data['mediumFileName'] = 'l/'.$nameBase . $data['ImgExtension'];
-        $data['largeFileName'] = 'v/'.$nameBase . $data['ImgExtension'];
+//        $data['smallFileName'] = 's/'.$nameBase . $data['ImgExtension'];
+//        $data['mediumFileName'] = 'l/'.$nameBase . $data['ImgExtension'];
+//        $data['largeFileName'] = 'v/'.$nameBase . $data['ImgExtension'];
+
+		$data['smallFileName'] = $nameBase . $data['ImgExtension'];
+        $data['mediumFileName'] = 'medium/'.$nameBase . $data['ImgExtension'];
+        $data['largeFileName'] = 'large/'.$nameBase . $data['ImgExtension'];
 
         $destination_name_small = DIR_FS_CATALOG_IMAGES .$data['smallFileName'];
         $destination_name_medium = DIR_FS_CATALOG_IMAGES .$data['mediumFileName'];
@@ -292,7 +306,8 @@ if (!empty($fileArray)) {
         }
         imagejpeg ( $im_s, $destination_name_small, 100 );
         imagedestroy ( $im );
-        $products_image_names[] = 's/'.$nameBase.$data['ImgExtension'];
+//        $products_image_names[] = 's/'.$nameBase.$data['ImgExtension'];
+		$products_image_names[] = $nameBase.$data['ImgExtension'];
 		if(API_MULTI_MAP_SETUP==false){
 		 break;
 		}
@@ -303,23 +318,28 @@ if (!empty($fileArray)) {
       if(is_array($products_image_names)){
         $newArray = array_merge($existimgArray,$products_image_names);
         $products_image_name = $newArray[0];
-        $products_image_name_string = implode ( ',', $newArray);
+//        $products_image_name_string = implode ( ',', $newArray);
+		$products_image_name_string = $newArray[0];
       }else{
         $products_image_name = $existimgArray[0];
-        $products_image_name_string = implode ( ',', $existimgArray);
+//        $products_image_name_string = implode ( ',', $existimgArray);
+ 		$products_image_name_string = $existimgArray[0];
       }
     }else{
       $products_image_name = $products_image_names[0];
-      $products_image_name_string = @implode ( ',', $products_image_names);
+//      $products_image_name_string = @implode ( ',', $products_image_names);
+      $products_image_name_string = $products_image_names[0];
     }
 
   }else{
-  	echo 'failed 没找到要下载的图�?!<br />';
+  	echo 'failed 没找到要下载的图�?!<br />';
     if(is_array($existimgArray)){
     $products_image_name = $existimgArray[0];
-    $products_image_name_string = implode ( ',', $existimgArray);
+//    $products_image_name_string = implode ( ',', $existimgArray);
+    $products_image_name_string = $existimgArray[0];
     }else{
     $products_image_name = $existimgArray[0];
+//    $products_image_name_string = $existimgArray[0];
     $products_image_name_string = $existimgArray[0];
     }
 
@@ -388,7 +408,7 @@ class watermark {
 }
 //判断远程文件是否存在
 function remote_file_exists($url_file){
-	//�?测输�?
+	//�?测输�?
 	$url_fil = trim($url_file);
 	if (empty($url_file)) { return false; }
 	$url_arr = parse_url($url_file);
@@ -399,16 +419,16 @@ function remote_file_exists($url_file){
 	$path = $url_arr['path'] ."?". $url_arr['query'];
 	$port = isset($url_arr['port']) ? $url_arr['port'] : "80";
 
-	//连接服务�?
+	//连接服务�?
 	$fp = fsockopen($host, $port, $err_no, $err_str, 30);
 	if (!$fp){ return false; }
 
-	//构�?�请求协�?
+	//构�?�请求协�?
 	$request_str = "GET ".$path." HTTP/1.1\r\n";
 	$request_str .= "Host: ".$host."\r\n";
 	$request_str .= "Connection: Close\r\n\r\n";
 
-	//发�?�请�?
+	//发�?�请�?
 	fwrite($fp, $request_str);
 	$first_header = fgets($fp, 1024);
 	fclose($fp);
@@ -424,12 +444,15 @@ function remote_file_exists($url_file){
 function check_remote_file_exists($url) 
 { 
 $curl = curl_init($url); 
-// 不取回数�? 
-curl_setopt($curl, CURLOPT_NOBODY, true); 
-// 发�?�请�? 
+//不取回数 
+curl_setopt($curl, CURLOPT_NOBODY, true);
+curl_setopt($curl,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
+curl_setopt($curl,CURLOPT_PROXYPORT , 8080);
+curl_setopt($curl,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
+//发请
 $result = curl_exec($curl); 
 $found = false; 
-// 如果请求没有发�?�失�? 
+// 如果请求没有发�?�失�? 
 if ($result !== false) { 
 // 再检查http响应码是否为200 
 $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE); 
@@ -442,7 +465,7 @@ curl_close($curl);
 return $found; 
 }
 /*
-下载远程图片到本�?
+下载远程图片到本�?
 $url:远程图片地址
 $filename:保存到本地的文件路径
 */
@@ -456,6 +479,12 @@ function loadRemoteImg($url = "", $filename = "") {
 	curl_setopt($hander,CURLOPT_HEADER,0); 
 	curl_setopt($hander,CURLOPT_FOLLOWLOCATION,1); 
 	curl_setopt($hander,CURLOPT_TIMEOUT,60); 
+	//set the proxy for the curl.
+	curl_setopt($hander,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
+	curl_setopt($hander,CURLOPT_PROXYPORT , 8080);
+	curl_setopt($hander,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
+	
+	
 	curl_exec($hander); 
 	curl_close($hander); 
 	fclose($fp); 

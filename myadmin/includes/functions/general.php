@@ -10,6 +10,7 @@
 ////
 // Redirect to another page or site
   function zen_redirect($url) {
+  	//var_dump(debug_backtrace()); 
     global $logger;
 
 // clean up URL before executing it
