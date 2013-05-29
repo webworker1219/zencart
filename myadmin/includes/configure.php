@@ -32,9 +32,9 @@
   $t1 = parse_url(HTTP_SERVER);$p1 = $t1['path'];$t2 = parse_url(HTTPS_SERVER);$p2 = $t2['path'];
 
   define('DIR_WS_ADMIN', preg_replace('#^' . str_replace('-', '\-', $p1) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-  define('DIR_WS_CATALOG', '/zencart/');
+  define('DIR_WS_CATALOG', '/zencartplugin/');
   define('DIR_WS_HTTPS_ADMIN', preg_replace('#^' . str_replace('-', '\-', $p2) . '#', '', dirname($_SERVER['SCRIPT_NAME'])) . '/');
-  define('DIR_WS_HTTPS_CATALOG', '/zencart/');
+  define('DIR_WS_HTTPS_CATALOG', '/zencartplugin/');
 
   define('DIR_WS_IMAGES', 'images/');
   define('DIR_WS_ICONS', DIR_WS_IMAGES . 'icons/');
@@ -51,10 +51,10 @@
 // * DIR_FS_* = Filesystem directories (local/physical)
   define('DIR_FS_ADMIN', realpath(dirname(__FILE__) . '/../') . '/');
   //the following path is a COMPLETE path to your Zen Cart files. eg: /var/www/vhost/accountname/public_html/store/
-  define('DIR_FS_CATALOG', 'c:/cloudwei/xampp/htdocs/zencart/');
+  define('DIR_FS_CATALOG', 'C:/cloudwei/xampp/htdocs/zencartplugin/');
 
   //the following path is a COMPLETE path to the /logs/ folder  eg: /var/www/vhost/accountname/public_html/store/logs ... and no trailing slash
-  define('DIR_FS_LOGS', 'c:/cloudwei/xampp/htdocs/zencart/logs');
+  define('DIR_FS_LOGS', 'C:/cloudwei/xampp/htdocs/zencartplugin/logs');
 
   define('DIR_FS_CATALOG_LANGUAGES', DIR_FS_CATALOG . 'includes/languages/');
   define('DIR_FS_CATALOG_IMAGES', DIR_FS_CATALOG . 'images/');
@@ -79,7 +79,7 @@
   // or webserver user has write privileges (chmod 666 or 777). We recommend using the "cache" folder inside the Zen Cart folder
   // ie: /path/to/your/webspace/public_html/zen/cache   -- leave no trailing slash  
   define('SQL_CACHE_METHOD', 'file'); 
-  define('DIR_FS_SQL_CACHE', 'c:/cloudwei/xampp/htdocs/zencart/cache');
+  define('DIR_FS_SQL_CACHE', 'C:/cloudwei/xampp/htdocs/zencartplugin/cache');
 
 
 // Define the webserver and path parameters

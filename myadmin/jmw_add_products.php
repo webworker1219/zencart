@@ -113,23 +113,22 @@ function gotoPage(){
 	var query_every_page  = $('#query_every_page').val();
 	
 	$(div_show_loading).html(loadingString);
-
+	
+	
 	$.ajax({
-		url : action,
-		type : 'GET',
-		data:{
-			jmw_categories_id:jmw_categories_id, select_jmw_key: select_jmw_key,select_jmw_sku:select_jmw_sku,
-			startprice:startprice,endprice:endprice,startputawaydate:startputawaydate,endputawaydate:endputawaydate,current_page_value:i
-			,query_every_page:query_every_page,whCode:WhCodeName},
-		success: function(mesg){
-			$(div_show_content).html(mesg);
+		type: "GET",    //define the type of ajax call (POST, GET, etc)
+	    url: action,   //The name of the script you are calling
+	    data: {jmw_categories_id:jmw_categories_id, select_jmw_key: select_jmw_key,select_jmw_sku:select_jmw_sku,
+				startprice:startprice,endprice:endprice,startputawaydate:startputawaydate,endputawaydate:endputawaydate,current_page_value:i
+				,query_every_page:query_every_page,whCode:WhCodeName},    //Your data you are sending to the script
+	    success: function(msg){
+			$(div_show_content).html(msg);
 			if(div_show_loading=='#show_cate_loading'){
-				 $(div_show_loading).html('&nbsp;&nbsp;完成&nbsp;&nbsp;');
+				$(div_show_loading).html('&nbsp;&nbsp;完成&nbsp;&nbsp;');
 			}
-		}
+	    }
 	});
-
-
+	
 	
 //	$.post(action, {
 //				jmw_categories_id:jmw_categories_id, select_jmw_key: select_jmw_key,select_jmw_sku:select_jmw_sku,
@@ -151,24 +150,22 @@ function ajax_wsdl_factory($_obj){
 	var clearHtml = typeof($_obj.clearHtml)!='undefined' ? $_obj.clearHtml : '';
 	if(this._action !=''){
 		$(this._id).html('<span style="color:#ff0000">'+this._loadingString+'</span>');
-
 		
 		$.ajax({
-			url : 'jmw_return.php?action='+this._action,
-			type : 'GET',
-			data:this._arguments,
-			success: function(mesg){
-				$(_id).html(mesg);
+    		type: "POST",    //define the type of ajax call (POST, GET, etc)
+		    url: "jmw_return.php?action="+this._action+"&isajax=true",   //The name of the script you are calling
+		    data: this._arguments,    //Your data you are sending to the script
+		    success: function(msg){
+		       $(_id).html(msg);
 				if(clearHtml!='') $('#'+clearHtml).html('');
-			}
+		    }
 		});
-
-
 		
 //		$.post('jmw_return.php?action='+this._action,this._arguments,function(data){
 //			$(_id).html(data);
 //			if(clearHtml!='') $('#'+clearHtml).html('');
 //		});
+		
 	}
 }
 $(document).ready(function(){
@@ -255,8 +252,7 @@ function func_input_confirm(frm){
 	products_sku=frm.products_sku['length']?products_sku:[products_sku];//判断是否为数组
 	var len               = products_sku.length;
 	var count_input=new Array();
-	//var price_rate_custom = new Array();
-	var price_rate_custom = '';
+	var price_rate_custom = new Array();
 	var j=0;
 	for(var i=0;i<len;i++){
 		if(products_sku[i].checked){
@@ -265,11 +261,8 @@ function func_input_confirm(frm){
 			if($_price_rate_temp!='' && ( $_price_rate_temp <0 || $_price_rate_temp=='undefinder')){
 				alert("请输入合法的利润点!");return false;
 			}else{
-				//price_rate_custom[j] = '{"sku":"'+products_sku[i].value+'","rate":"'
-				//						+( ( $_price_rate_temp!='' && $_price_rate_temp >= 0 ) ? $_price_rate_temp : price_rate) +'"}';
-				//将利润点数组变成字符串，方便ajax的get方法传递参数。
-				price_rate_custom = price_rate_custom+'{"sku":"'+products_sku[i].value+'","rate":"'
-				+( ( $_price_rate_temp!='' && $_price_rate_temp >= 0 ) ? $_price_rate_temp : price_rate) +'"}'+';';
+				price_rate_custom[j] = '{"sku":"'+products_sku[i].value+'","rate":"'
+										+( ( $_price_rate_temp!='' && $_price_rate_temp >= 0 ) ? $_price_rate_temp : price_rate) +'"}';
 			}
 			j++;
 		}
@@ -281,15 +274,13 @@ function func_input_confirm(frm){
 	$('#show_add_products_loading').html("<span style='color:#06C;'><b>执行开始...</b></span><br />");
 	tmp=0;
 	function ajax_jwm_addproducts(sku_arr,add_to_categories,price_rate_custom){
-		$("#show_add_products_loading").html($("#show_add_products_loading").html()+sku_arr+'...START'+'<br />');
-
-
-		//增加新的商品到本地
+		$("#show_add_products_loading").html($("#show_add_products_loading").html()+sku_arr[0]+'...START'+'<br />');
+		
 		$.ajax({
-			url : "jmw_return.php?action=add_jmw_products",
-			type : 'GET',
-			data:{products_sku:sku_arr,add_to_categories:add_to_categories,rate:price_rate_custom},
-			success: function(mesg){
+    		type: "POST",    //define the type of ajax call (POST, GET, etc)
+		    url: "jmw_return.php?action=add_jmw_products&isajax=true",   //The name of the script you are calling
+		    data: {products_sku:sku_arr,add_to_categories:add_to_categories,rate:price_rate_custom},    //Your data you are sending to the script
+		    success: function(mesg) {
 				$("#show_add_products_loading").html($("#show_add_products_loading").html()+'<br /><span style="color:#06C"><b>'+mesg+'...END</b></span><br />');
 				tmp+=1;
 				if(tmp<count_input.length) {
@@ -302,9 +293,9 @@ function func_input_confirm(frm){
 					setTimeout(tout,3000);
 				}
 				if(tmp==count_input.length) $("#show_add_products_loading").html($("#show_add_products_loading").html()+'<br /><span style="color:#06C"><b>执行完毕!</b></span>');
-			}
+		    }
 		});
-
+		
 		
 //		$.post("jmw_return.php?action=add_jmw_products", {products_sku:sku_arr,add_to_categories:add_to_categories,rate:price_rate_custom},
 //			function(data) {
@@ -322,21 +313,15 @@ function func_input_confirm(frm){
 //				if(tmp==count_input.length) $("#show_add_products_loading").html($("#show_add_products_loading").html()+'<br /><span style="color:#06C"><b>执行完毕!</b></span>');
 //		});
 	}
-	var sku_arr = '';
-	for ( var i=0,len=count_input.length; i<len;i++) {
-		sku_arr = sku_arr+count_input[i]+',';
-	}
-	sku_arr=sku_arr.substring(0, sku_arr.length-1);
-	//去掉利润点字符串后面的';'
-	price_rate_custom = price_rate_custom.substring(0, price_rate_custom.length-1);
+	sku_arr = new Array();
+	sku_arr[0] =count_input[0];
 	ajax_jwm_addproducts(sku_arr,add_to_categories,price_rate_custom);
-		
+
 	//onload=request_page("home_page");
 	//window.location.reload();
 	//parent.ymPrompt.close();//关闭弹出窗口
 	//return false;
 	setTimeout("add_products_whether_sussecc()",600000);
-	
 }
 function add_products_whether_sussecc(){
   if(confirm("是否继续添加?")){
@@ -477,7 +462,7 @@ function request_fail_products(fial){
 <?php
 if($_GET['action']=='request_jmw_update'){
     //echo'<script type="text/javascript">onload=request_jmw_update();</script>';
-	echo'
+	?>
 	<div class="pageHeading">借卖网产品更新查询</div>
 	<div style="line-height:25px;">
 		<span id="current_categories" style="width:auto;overflow:hidden;">
@@ -506,7 +491,7 @@ if($_GET['action']=='request_jmw_update'){
 		<input type="button" value="查询" onclick="request_jmw_update();">
 		<input type="button" class="submit" value="返回" onclick="history.back();">
     </div>
-	';
+<?php
 	echo'<div id="return_result_html"></div>';
     echo'<div id="show_update_loading"></div>';
 }else{

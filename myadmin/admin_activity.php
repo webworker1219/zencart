@@ -276,6 +276,7 @@ if ($action != '')
   } //end switch / case
 } //endif $action
 ?>
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php
 echo HTML_PARAMS;
 ?>>
