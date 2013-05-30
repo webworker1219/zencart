@@ -300,9 +300,18 @@ function update_jmw_config_info($username,$password){//更新配置文件中的�
   $db->Execute("update ".TABLE_CONFIGURATION." set 	configuration_value='".$password."' where configuration_key='JMW_API_KEY'");
 }
 
+
 function handle_request_function($function_name,$parameter){//处理请求的接口函数，并返回请求的结果
    try{
-   		$jmwWSDLClient              = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl', array(true));
+	   	$proxyAddress='inet-proxy-a.appl.swissbank.com';
+		$proxyPort='8080';
+		$proxyUserName='weicl';
+		$proxyPass='Ab123456';
+   		$jmwWSDLClient              = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl', array(
+											'proxy_host'     => $proxyAddress,
+                                            'proxy_port'     => 8080,
+                                            'proxy_login'    => $proxyUserName,
+                                            'proxy_password' => $proxyPass));
 		$parameter           = is_array($parameter)?$parameter:array($parameter);
    		$result              = $jmwWSDLClient->__call($function_name,array($parameter));
    }catch(SOAPFault $e) {
@@ -373,7 +382,11 @@ if (zen_not_null($action)) {
 		
 		$param               = array('in0'=>$jmw_login_name ,'in1'=>$jmw_password);
  		try {
- 			$jmwWSDLClient = new SoapClient("http://www.jiemai.com/services/JieMaiService?wsdl", array(true));
+ 			$jmwWSDLClient = new SoapClient("http://www.jiemai.com/services/JieMaiService?wsdl",array(
+											'proxy_host'     => $proxyAddress,
+                                            'proxy_port'     => 8080,
+                                            'proxy_login'    => $proxyUserName,
+                                            'proxy_password' => $proxyPass));
  			$result              = $jmwWSDLClient->__call('fetchToken',array($param));
  		}catch (SoapFault  $e){
  			 print_r($e);
@@ -450,7 +463,7 @@ function func_delete_products(frm){
 	  return false;
 	}
 	$('#delete_products_loading').html(loadingString);
-	$.post("jmw_return.php?action=shelveproductfromshop", {products_id:count_input},
+	$.post("jmw_return.php?action=shelveproductfromshop&isajax=true", {products_id:count_input},
 	function(data) {
 	  $('#delete_products_loading').html(data);
 	});
@@ -467,7 +480,7 @@ function handle_delete_product(){
 			j++;
 		}
 	}
-	$.post("jmw_api.php?action=delete_products_id", {products_id:count_input},
+	$.post("jmw_api.php?action=delete_products_id&isajax=true", {products_id:count_input},
 	    function(data) {
 	    $('#delete_products_loading').html(data);
 	   });
@@ -581,7 +594,7 @@ function ajax_wsdl_factory($_obj){
 	this._arguments = eval('('+this._arguments+')');
 	if(this._action !=''){
 		$(this._id).html('<span style="color:#ff0000">'+this._loadingString+'</span>');
-		$.post('jmw_return.php?action='+this._action,this._arguments,function(data){
+		$.post('jmw_return.php?action='+this._action+'&isajax=true',this._arguments,function(data){
 			$(_id).html(data);
 		});
 	}
