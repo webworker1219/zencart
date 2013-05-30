@@ -130,7 +130,7 @@ function handle_add_fail_products($products_sku,$add_to_categories,$price_rate_c
 			$products_id = get_association_sku_productsid($productsarrays->sku);
 			//echo '----------------------------'.$productsarrays->sku.'--------------------------';
 			if(empty($products_id)){
-				$_products_image = $NewHandleImages->products_urlimage_handle($productsarrays->picInfo->PicInfo);
+				$_products_image = $NewHandleImages->products_urlimage_handle($productsarrays->picInfo->PicInfo,$products_id);
 				
 				if(!empty($_products_image)){
 					
@@ -148,12 +148,6 @@ function handle_add_fail_products($products_sku,$add_to_categories,$price_rate_c
 						$products_quantity       = (!zen_not_null($tmp_value) || $tmp_value=='' || $tmp_value == 0) ? 0 : $tmp_value;
 						$price_rate = queryPriceRate($productsarrays->sku,$price_rate_custom);
 						$price_rate              =  intval($price_rate)>0?intval($price_rate)/100:0;
-						echo '----price is ---'.$productsarrays->price;
-						echo '<br>';
-						echo '----price rate is ---'.$price_rate;
-						echo '<br>';
-						echo '--currencies value is-----'.$currencies_value;
-						echo '<br>';
 						$products_price          = round(($productsarrays->price*((int)1+$price_rate))/$currencies_value,2);
 						
 						$products_weight         = zen_db_prepare_input($productsarrays->weight);

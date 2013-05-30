@@ -147,11 +147,11 @@ if (!empty($fileArray)) {
 //	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'l/'.$foldDate.'/temp.txt' ;
 //	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
 
-
+	//按照月份归类新增的产品，并分为大中小三种图片
 	$tempfile1 = DIR_FS_CATALOG_IMAGES .$foldDate.'/temp.txt' ;
 	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'medium/'.$foldDate.'/temp.txt' ;
 	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'large/'.$foldDate.'/temp.txt' ;
-	
+	//如果没有目录则创建新的目录
 	io_makeFileDir($tempfile1);
 	io_makeFileDir($tempfile2);
 	io_makeFileDir($tempfile3);
@@ -346,6 +346,249 @@ if (!empty($fileArray)) {
   }
  return   $products_image_name_string ;
 }
+
+
+//增加一个新的处理图片的方法以产品的SKU作为文件名
+function products_urlimage_handle($jmwimagearr=array(),$product_sku){
+
+if(sizeof($jmwimagearr)<=0) return '';
+if(!empty($jmwimagearr->imageBurl)) {
+	$handle_image = array($jmwimagearr->imageBurl);
+}else{
+	foreach ($jmwimagearr as $_k => $_imageobj){
+		$url_images_string.=$_imageobj->imageBurl.',';
+	}
+	if(!empty($url_images_string)) $url_images_string =substr($url_images_string,0,-1);
+	$handle_image=explode(',',$url_images_string);
+}
+//echo '<span style="color:#ff0000">jmw images - > '.print_r($jmwimagearr,true).'</span><br /> ' ;
+if(!empty($handle_image)){
+	for($i=0;$i<sizeof($handle_image);$i++){
+		//$file_whether=@file_get_contents($handle_image[$i]);
+		//if(!empty($file_whether)){
+		//	$fileArray[]=array('name'=>end(explode('/',$handle_image[$i])),'tmp_name'=>$handle_image[$i]);
+		//}
+		
+		if (check_remote_file_exists($handle_image[$i])) {
+			$fileArray[]=array('name'=>end(explode('/',$handle_image[$i])),'tmp_name'=>$handle_image[$i]);
+		}else {
+			//echo $url_images_string.' ... failed '.$handle_image[$i].'图片下载失败!<br />';
+		}
+	}
+}
+$watermark = DIR_FS_CATALOG_IMAGES.'watermark.png';
+$wateralpha = 65; 
+@array_multisort($fileArray,SORT_ASC); 
+if (!empty($fileArray)) {
+    $data = array();
+	$foldDate = date('Ym') ;
+//	$tempfile1 = DIR_FS_CATALOG_IMAGES . 's/'.$foldDate.'/temp.txt' ;
+//	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'l/'.$foldDate.'/temp.txt' ;
+//	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
+
+	//按照月份归类新增的产品，并分为大中小三种图片
+	$tempfile1 = DIR_FS_CATALOG_IMAGES .$foldDate.'/temp.txt' ;
+	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'medium/'.$foldDate.'/temp.txt' ;
+	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'large/'.$foldDate.'/temp.txt' ;
+	//如果没有目录则创建新的目录
+	io_makeFileDir($tempfile1);
+	io_makeFileDir($tempfile2);
+	io_makeFileDir($tempfile3);
+	$nameBase = $foldDate.'/'.$product_sku.$i;
+    for($i = 0; $i < count ( $fileArray ); $i ++) {
+	    set_time_limit(1200);
+        
+//		$nameBase = $foldDate.'/'.time().$i;
+        $data['ImgExtension'] = strtolower(substr( $fileArray[$i]['name'], strrpos($fileArray[$i]['name'], '.')));
+        $source_name = $fileArray[$i]['tmp_name'];
+       
+//      $destination_name = DIR_FS_CATALOG_IMAGES . 's/'.$nameBase . $data['ImgExtension'];
+		if($i==0){
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase . $data['ImgExtension'];
+		}else{
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase.'_0'.$i . $data['ImgExtension'];
+		}
+		echo '----source_nameis-------'.$source_name;
+        if ( !loadRemoteImg($source_name, $destination_name) ) {
+          //echo ('failed to copy '.$source_name.' to '.$destination_name.'...'. "error<br />" );
+        }else{
+          //echo( "success:" .$source_name.'<br />');
+        }
+		
+		
+//        $data['smallFileName'] = 's/'.$nameBase . $data['ImgExtension'];
+//        $data['mediumFileName'] = 'l/'.$nameBase . $data['ImgExtension'];
+//        $data['largeFileName'] = 'v/'.$nameBase . $data['ImgExtension'];
+
+		$data['smallFileName'] = $nameBase . $data['ImgExtension'];
+        $data['mediumFileName'] = 'medium/'.$nameBase . $data['ImgExtension'];
+        $data['largeFileName'] = 'large/'.$nameBase . $data['ImgExtension'];
+
+        $destination_name_small = DIR_FS_CATALOG_IMAGES .$data['smallFileName'];
+        $destination_name_medium = DIR_FS_CATALOG_IMAGES .$data['mediumFileName'];
+        $destination_name_large = DIR_FS_CATALOG_IMAGES .$data['largeFileName'];
+          
+        
+        if (!copy($destination_name, $destination_name_medium)) {
+          //echo ('failed to copy '.$destination_name_medium.'...'. "error <br />" );
+        }else{
+          //echo ('Successed to copy '.$file.'...'. "success" );
+
+          if (strtolower($data['ImgExtension']) == ".jpg" || strtolower($data['ImgExtension']) == ".jpeg")
+            $im = @imagecreatefromjpeg ($destination_name_medium );
+          if (strtolower($data['ImgExtension']) == ".gif")
+            $im = @imagecreatefromgif ($destination_name_medium );
+          if (strtolower($data['ImgExtension']) == ".png")
+            $im = @imagecreatefrompng ($destination_name_medium );
+          list($width_orig, $height_orig) = getimagesize($destination_name_medium );
+          $width = PRODUCT_MEDIUM_IMAGE_WIDTH;
+          $height = PRODUCT_MEDIUM_IMAGE_HEIGHT;
+          if ($width && ($width_orig < $height_orig)) {
+              $width = ($height / $height_orig) * $width_orig;
+          } else {
+              $height = ($width / $width_orig) * $height_orig;
+          }
+
+          $im_s = imagecreatetruecolor(PRODUCT_MEDIUM_IMAGE_WIDTH,PRODUCT_MEDIUM_IMAGE_HEIGHT);
+
+          $white = imagecolorallocate($im_s, 255, 255, 255);
+
+          imagefill($im_s, 0, 0, $white);
+
+		  
+          if ($width_orig <= $width){
+            $wpos=(PRODUCT_MEDIUM_IMAGE_WIDTH - $width_orig)/2;
+            $hpos=(PRODUCT_MEDIUM_IMAGE_HEIGHT - $height_orig)/2;
+            imagecopy($im_s,$im,$wpos, $hpos, 0, 0,$width_orig,$height_orig );
+          }else{
+            $wpos=(PRODUCT_MEDIUM_IMAGE_WIDTH - $width)/2;
+            $hpos=(PRODUCT_MEDIUM_IMAGE_HEIGHT - $height)/2;
+            imagecopyresampled($im_s,$im,$wpos, $hpos, 0, 0,$width,$height,$width_orig,$height_orig );
+          }
+          imagejpeg ( $im_s, $destination_name_medium, 100 );
+          imagedestroy ( $im );       
+        }
+        
+        
+        
+        if (!copy($destination_name, $destination_name_large)) {
+          //echo ('failed to copy '.$destination_name_large.'...'."error <br />" );
+        }else{
+          //echo ('Successed to copy '.$file.'...'. "success" );
+          
+          if (strtolower($data['ImgExtension']) == ".jpg" || strtolower($data['ImgExtension']) == ".jpeg")
+            $im = @imagecreatefromjpeg ($destination_name_large );
+          if (strtolower($data['ImgExtension']) == ".gif")
+            $im = @imagecreatefromgif ($destination_name_large );
+          if (strtolower($data['ImgExtension']) == ".png")
+            $im = @imagecreatefrompng ($destination_name_large );
+          list($width_orig, $height_orig) = getimagesize($destination_name_large );
+          $width = PRODUCT_MEDIUM_LARGE_WIDTH;
+          $height = PRODUCT_MEDIUM_LARGE_HEIGHT;
+          if ($width && ($width_orig < $height_orig)) {
+              $width = ($height / $height_orig) * $width_orig;
+          } else {
+              $height = ($width / $width_orig) * $height_orig;
+          }
+          $im_s = @imagecreatetruecolor ( PRODUCT_MEDIUM_LARGE_WIDTH, PRODUCT_MEDIUM_LARGE_HEIGHT );
+		  
+          $white = @imagecolorallocate($im_s, 255, 255, 255);
+          imagefill($im_s, 0, 0, $white);
+          if ($width_orig <= $width){
+	          $wpos=(PRODUCT_MEDIUM_LARGE_WIDTH - $width_orig)/2;
+	          $hpos=(PRODUCT_MEDIUM_LARGE_HEIGHT - $height_orig)/2;
+	          imagecopy($im_s,$im,$wpos, $hpos, 0, 0,$width_orig,$height_orig );
+          }else{
+          	$wpos=(PRODUCT_MEDIUM_LARGE_WIDTH - $width)/2;
+            $hpos=(PRODUCT_MEDIUM_LARGE_HEIGHT - $height)/2;
+            imagecopyresampled($im_s,$im,$wpos, $hpos, 0, 0,$width,$height,$width_orig,$height_orig );
+          }
+          list($water_w, $water_h) = getimagesize($watermark);
+          $dst_x = (PRODUCT_MEDIUM_LARGE_WIDTH - $water_w)/2;   
+          $dst_y = (PRODUCT_MEDIUM_LARGE_HEIGHT + $water_h)/1.5;    
+		  $im_watermark = @imagecreatefrompng ($watermark );
+		  if(WATERMARK_TRANSPARENT == 'yes') {
+		  	@imagejpeg ( $im_s, $destination_name_large, 100 );
+	        $im_s = watermark::emboss($destination_name_large, $watermark, PRODUCT_MEDIUM_LARGE_WIDTH, PRODUCT_MEDIUM_LARGE_HEIGHT);
+		  } else {
+		  	 @imagecopymerge($im_s, $im_watermark, $dst_x, $dst_y, 0, 0,$water_w, $water_h,$wateralpha);
+		  }
+          @imagejpeg ( $im_s, $destination_name_large, 100 );
+          @imagedestroy ( $im );        
+        }
+        
+        if (strtolower($data['ImgExtension']) == ".jpg" || strtolower($data['ImgExtension']) == ".jpeg")
+          $im = @imagecreatefromjpeg ($destination_name_small );
+        if (strtolower($data['ImgExtension']) == ".gif")
+          $im = @imagecreatefromgif ($destination_name_small );
+        if (strtolower($data['ImgExtension']) == ".png")
+          $im = @imagecreatefrompng ($destination_name_small );
+          
+        list($width_orig, $height_orig) = getimagesize($destination_name_small);
+        $width = PRODUCT_MEDIUM_SMALL_WIDTH;
+        $height = PRODUCT_MEDIUM_SMALL_HEIGHT;
+        if ($width && ($width_orig < $height_orig)) {
+            $width = ($height / $height_orig) * $width_orig;
+        } else {
+            $height = ($width / $width_orig) * $height_orig;
+        }
+        $im_s = @imagecreatetruecolor( PRODUCT_MEDIUM_SMALL_WIDTH, PRODUCT_MEDIUM_SMALL_HEIGHT ) or die("Cannot Initialize new GD image stream");
+        $white = imagecolorallocate($im_s, 255, 255, 255);
+        imagefill($im_s, 0, 0, $white);
+        if ($width_orig <= $width){
+            $wpos=(PRODUCT_MEDIUM_SMALL_WIDTH - $width_orig)/2;
+            $hpos=(PRODUCT_MEDIUM_SMALL_HEIGHT - $height_orig)/2;
+            imagecopy($im_s,$im,$wpos, $hpos, 0, 0,$width_orig,$height_orig );
+        }else{
+            $wpos=(PRODUCT_MEDIUM_SMALL_WIDTH - $width)/2;
+            $hpos=(PRODUCT_MEDIUM_SMALL_HEIGHT - $height)/2;
+            imagecopyresampled($im_s,$im,$wpos, $hpos, 0, 0,$width,$height,$width_orig,$height_orig );
+        }
+        imagejpeg ( $im_s, $destination_name_small, 100 );
+        imagedestroy ( $im );
+//        $products_image_names[] = 's/'.$nameBase.$data['ImgExtension'];
+		$products_image_names[] = $nameBase.$data['ImgExtension'];
+		if(API_MULTI_MAP_SETUP==false){
+		 break;
+		}
+        
+    }
+    
+    if(is_array($existimgArray)){
+      if(is_array($products_image_names)){
+        $newArray = array_merge($existimgArray,$products_image_names);
+        $products_image_name = $newArray[0];
+//        $products_image_name_string = implode ( ',', $newArray);
+		$products_image_name_string = $newArray[0];
+      }else{
+        $products_image_name = $existimgArray[0];
+//        $products_image_name_string = implode ( ',', $existimgArray);
+ 		$products_image_name_string = $existimgArray[0];
+      }
+    }else{
+      $products_image_name = $products_image_names[0];
+//      $products_image_name_string = @implode ( ',', $products_image_names);
+      $products_image_name_string = $products_image_names[0];
+    }
+
+  }else{
+  	echo 'failed 没找到要下载的图�?!<br />';
+    if(is_array($existimgArray)){
+    $products_image_name = $existimgArray[0];
+//    $products_image_name_string = implode ( ',', $existimgArray);
+    $products_image_name_string = $existimgArray[0];
+    }else{
+    $products_image_name = $existimgArray[0];
+//    $products_image_name_string = $existimgArray[0];
+    $products_image_name_string = $existimgArray[0];
+    }
+
+  }
+ return   $products_image_name_string ;
+}
+
+
+
 }
 
 class watermark {
@@ -444,15 +687,15 @@ function remote_file_exists($url_file){
 function check_remote_file_exists($url) 
 { 
 $curl = curl_init($url); 
-//不取回数 
+//设置参数
 curl_setopt($curl, CURLOPT_NOBODY, true);
 curl_setopt($curl,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
 curl_setopt($curl,CURLOPT_PROXYPORT , 8080);
 curl_setopt($curl,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
-//发请
+//发出请求
 $result = curl_exec($curl); 
 $found = false; 
-// 如果请求没有发�?�失�? 
+// 如果有请求
 if ($result !== false) { 
 // 再检查http响应码是否为200 
 $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE); 
@@ -465,7 +708,7 @@ curl_close($curl);
 return $found; 
 }
 /*
-下载远程图片到本�?
+下载远程图片到本地?
 $url:远程图片地址
 $filename:保存到本地的文件路径
 */
