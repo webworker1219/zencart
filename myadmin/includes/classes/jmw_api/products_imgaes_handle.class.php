@@ -349,7 +349,7 @@ if (!empty($fileArray)) {
 
 
 //增加一个新的处理图片的方法以产品的SKU作为文件名
-function products_urlimage_handle($jmwimagearr=array(),$product_sku){
+function products_urlimage_handle_sku($jmwimagearr=array(),$product_sku){
 
 if(sizeof($jmwimagearr)<=0) return '';
 if(!empty($jmwimagearr->imageBurl)) {
@@ -387,14 +387,14 @@ if (!empty($fileArray)) {
 //	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
 
 	//按照月份归类新增的产品，并分为大中小三种图片
-	$tempfile1 = DIR_FS_CATALOG_IMAGES .$foldDate.'/temp.txt' ;
+	$tempfile1 = DIR_FS_CATALOG_IMAGES . 'small/'.$foldDate.'/temp.txt' ;
 	$tempfile2 = DIR_FS_CATALOG_IMAGES . 'medium/'.$foldDate.'/temp.txt' ;
 	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'large/'.$foldDate.'/temp.txt' ;
 	//如果没有目录则创建新的目录
 	io_makeFileDir($tempfile1);
 	io_makeFileDir($tempfile2);
 	io_makeFileDir($tempfile3);
-	$nameBase = $foldDate.'/'.$product_sku.$i;
+	$nameBase = $foldDate.'/'.$product_sku;
     for($i = 0; $i < count ( $fileArray ); $i ++) {
 	    set_time_limit(1200);
         
@@ -404,11 +404,10 @@ if (!empty($fileArray)) {
        
 //      $destination_name = DIR_FS_CATALOG_IMAGES . 's/'.$nameBase . $data['ImgExtension'];
 		if($i==0){
-			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase . $data['ImgExtension'];
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase.'_orign' . $data['ImgExtension'];
 		}else{
-			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase.'_0'.$i . $data['ImgExtension'];
+			$destination_name = DIR_FS_CATALOG_IMAGES .$nameBase.'_orign'.$i . $data['ImgExtension'];
 		}
-		echo '----source_nameis-------'.$source_name;
         if ( !loadRemoteImg($source_name, $destination_name) ) {
           //echo ('failed to copy '.$source_name.' to '.$destination_name.'...'. "error<br />" );
         }else{
@@ -419,10 +418,16 @@ if (!empty($fileArray)) {
 //        $data['smallFileName'] = 's/'.$nameBase . $data['ImgExtension'];
 //        $data['mediumFileName'] = 'l/'.$nameBase . $data['ImgExtension'];
 //        $data['largeFileName'] = 'v/'.$nameBase . $data['ImgExtension'];
-
-		$data['smallFileName'] = $nameBase . $data['ImgExtension'];
-        $data['mediumFileName'] = 'medium/'.$nameBase . $data['ImgExtension'];
-        $data['largeFileName'] = 'large/'.$nameBase . $data['ImgExtension'];
+		$resultImage = $nameBase.$data['ImgExtension'];
+		if($i==0){
+			$data['smallFileName'] = $nameBase . $data['ImgExtension'];
+			$data['mediumFileName'] = 'medium/'.$nameBase.'_MED' . $data['ImgExtension'];
+			$data['largeFileName'] = 'large/'.$nameBase.'_LRG' . $data['ImgExtension'];
+		}else{
+			$data['smallFileName'] = $nameBase.'_0'.$i . $data['ImgExtension'];
+			$data['mediumFileName'] = 'medium/'.$nameBase.'_0'.$i.'_MED' . $data['ImgExtension'];
+			$data['largeFileName'] = 'large/'.$nameBase.'_0'.$i.'_LRG' . $data['ImgExtension'];
+		}
 
         $destination_name_small = DIR_FS_CATALOG_IMAGES .$data['smallFileName'];
         $destination_name_medium = DIR_FS_CATALOG_IMAGES .$data['mediumFileName'];
@@ -454,7 +459,7 @@ if (!empty($fileArray)) {
           $white = imagecolorallocate($im_s, 255, 255, 255);
 
           imagefill($im_s, 0, 0, $white);
-
+		  
 		  
           if ($width_orig <= $width){
             $wpos=(PRODUCT_MEDIUM_IMAGE_WIDTH - $width_orig)/2;
@@ -517,6 +522,9 @@ if (!empty($fileArray)) {
           @imagedestroy ( $im );        
         }
         
+         if (!copy($destination_name, $destination_name_small)) {
+          //echo ('failed to copy '.$destination_name_small.'...'. "error <br />" );
+        }else{
         if (strtolower($data['ImgExtension']) == ".jpg" || strtolower($data['ImgExtension']) == ".jpeg")
           $im = @imagecreatefromjpeg ($destination_name_small );
         if (strtolower($data['ImgExtension']) == ".gif")
@@ -546,6 +554,8 @@ if (!empty($fileArray)) {
         }
         imagejpeg ( $im_s, $destination_name_small, 100 );
         imagedestroy ( $im );
+        unlink($destination_name);
+         }
 //        $products_image_names[] = 's/'.$nameBase.$data['ImgExtension'];
 		$products_image_names[] = $nameBase.$data['ImgExtension'];
 		if(API_MULTI_MAP_SETUP==false){
@@ -584,7 +594,8 @@ if (!empty($fileArray)) {
     }
 
   }
- return   $products_image_name_string ;
+ //return   $products_image_name_string ;
+ return   $resultImage ;
 }
 
 
