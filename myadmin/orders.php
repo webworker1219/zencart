@@ -315,6 +315,37 @@
         break;
     }
   }
+
+if($action=='send_forecast_orders'){
+  $get_send_forecast_info   = !empty($_POST['order_no'])?send_forecast_4px($_POST['order_no']):array();
+  $fial_orders_no           = $get_send_forecast_info?$get_send_forecast_info['fail_orders_id']:array();
+  unset($_POST['order_no']);
+}
+if($action=='update_send_forecast_orders'){
+  $update_sql_array =array('billing_name'=>$_POST['billing_name'],'billing_country'=>$_POST['billing_country']
+                           ,'billing_city'=>$_POST['billing_city'],'billing_state'=>$_POST['billing_state']
+						   ,'billing_street_address'=>$_POST['billing_street_address'],'billing_suburb'=>$_POST['billing_suburb']
+						   ,'billing_postcode'=>$_POST['billing_postcode'],'billing_phone'=>$_POST['billing_phone']);
+zen_db_perform(TABLE_ORDERS, $update_sql_array,'update','orders_id='.$_POST['orders_id']);
+echo 'Update success!';
+echo '
+<script type="text/javascript">
+function close_windows(){
+ window.close();
+}setTimeout("close_windows()",1000);
+</script>
+';die();
+zen_redirect(zen_href_link(FILENAME_ORDERS,'', 'NONSSL'));
+}
+function get_shipping_is_4px_products($orders_code){
+  global $db;
+  $sql_statsment  = "select pk_code from shipping_pricerule where pk_code='".$orders_code."'";
+  $get_result     = $db->Execute($sql_statsment);
+  $is_4px_products= $get_result->fields['pk_code'];
+  if($is_4px_products){
+    return 1;
+  }
+}
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
@@ -326,6 +357,39 @@
 <link rel="stylesheet" type="text/css" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
 <script language="javascript" src="includes/menu.js"></script>
 <script language="javascript" src="includes/general.js"></script>
+<script language="javascript" src="includes/javascript/jquery-1.5.js"></script>
+<script type="text/javascript">
+var utime=0;
+function submit_choice_orders_no(frm){
+/*  var new_date=Date.parse(new Date())/1000;
+  var time_new =(new_date-utime);
+  if(time_new<10){
+	alert('请稍后提交！');
+	return false;
+  }
+  utime=new_date;*/
+    var loadingString     = '<img src="images/loading.gif" border="0" /> loading...';
+	var order_no      = frm.order_no;
+	order_no=frm.order_no['length']?order_no:[order_no];//判断是否为数组
+	var len               = order_no.length;
+	var count_input=new Array();
+	var j=0;
+	for(var i=0;i<len;i++){
+		if(order_no[i].checked){
+			count_input[j]=order_no[i].value;
+			j++;
+		}
+	}
+	if(count_input.length==0){
+	  alert('订单号不能为空');
+	  return false;
+	}
+	frm.submit();
+	/*$('#show_send_forecast_loading').html(loadingString);
+	$.post("orders.php?action=send_forecast_orders", {orders_id_array:count_input},
+	function(data) {$("#show_send_forecast_loading").html(data);}); */
+}
+</script>
 <script type="text/javascript">
   <!--
   function init()
@@ -352,6 +416,27 @@ function couponpopupWindow(url) {
   require(DIR_WS_INCLUDES . 'header.php');
 ?>
 </div>
+<?php
+	if($action=="update_orders_id_info" and $_GET['orders_id']!=''){
+      $get_orders_array   =  get_orders_info_mzt($_GET['orders_id']);
+	  echo zen_draw_form('choice_orders_no', FILENAME_ORDERS, 'action=update_send_forecast_orders', 'post', '', true);
+	  echo '<div style="padding:5px;line-height:25px;">';
+	  echo 'Orders number:'.$get_orders_array['order_no'].'<br />';
+	  echo '<input type="hidden" value="'.$_GET['orders_id'].'" name="orders_id">';
+	  //echo 'Shipping Tracking number:'.$get_orders_array['order_no'].$get_orders_array['customers_id'].'<br />';
+	  echo 'Billing name:'.zen_draw_input_field('billing_name', $get_orders_array['billing_name'], 'size="30"').'<br />';
+	  echo 'Country / Region:'.zen_draw_input_field('billing_country', $get_orders_array['billing_country'], 'size="30"').'<br />';
+	  echo 'City:'.zen_draw_input_field('billing_city', $get_orders_array['billing_city'], 'size="30"').'<br />';
+	  echo 'State/Province/Region: 	'.zen_draw_input_field('billing_state', $get_orders_array['billing_state'], 'size="30"').'<br />';
+	  echo 'Address Line1:'.zen_draw_input_field('billing_street_address', $get_orders_array['billing_street_address'], 'size="30"').'<br />';
+	  echo 'Address Line 2:'.zen_draw_input_field('billing_suburb', $get_orders_array['billing_suburb'], 'size="30"').'<br />';
+	  echo 'ZIP/Postal Code:'.zen_draw_input_field('billing_postcode', $get_orders_array['billing_postcode'], 'size="30"').'<br />';
+	  echo 'Phone Number: '.zen_draw_input_field('billing_phone', $get_orders_array['billing_phone'], 'size="30"').'<br />';
+	  echo  zen_image_submit('button_save.gif', IMAGE_SAVE,'  onclick="insert_incidentalprice_save();" ');
+	  echo '</div></form>';
+	  die();
+	}
+?>
 <!-- header_eof //-->
 
 <!-- body //-->
@@ -724,7 +809,9 @@ function couponpopupWindow(url) {
         </table></td>
       </tr>
       <tr>
-        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
+        <td>
+<?php echo zen_draw_form('choice_orders_no', FILENAME_ORDERS, 'action=send_forecast_orders', 'post', '', true); ?>
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td class="smallText"><?php echo TEXT_LEGEND . ' ' . zen_image(DIR_WS_IMAGES . 'icon_status_red.gif', TEXT_BILLING_SHIPPING_MISMATCH, 10, 10) . ' ' . TEXT_BILLING_SHIPPING_MISMATCH; ?>
           </td>
@@ -758,7 +845,7 @@ function couponpopupWindow(url) {
               default:
               $disp_order = "c.customers_id DESC";
           }
-?>
+?>              <td class="dataTableHeadingContent" align="center"></td>
                 <td class="dataTableHeadingContent" align="center"><?php echo TABLE_HEADING_ORDERS_ID; ?></td>
                 <td class="dataTableHeadingContent" align="left" width="50"><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></td>
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_CUSTOMERS; ?></td>
@@ -882,6 +969,20 @@ if (($_GET['page'] == '' or $_GET['page'] <= 1) and $_GET['oID'] != '') {
       }
       $show_payment_type = $orders->fields['payment_module_code'] . '<br />' . $orders->fields['shipping_module_code'];
 ?>
+<td class="dataTableContent" align="left">
+<?php 
+if(empty($fial_orders_no)){$fial_orders_no =array();}
+$checkbox =null;
+$shipping_is_4px_product = get_shipping_is_4px_products($orders->fields['shipping_module_code']);
+if(in_array($orders->fields['orders_id'],$fial_orders_no)){
+ $checkbox  = ' checked ="checked" ';
+}
+$send_forecast_status = $orders->fields['send_forecast_status'];
+	  if($send_forecast_status==0 && $shipping_is_4px_product==1){
+?>
+<input type="checkbox" value="<?php echo $orders->fields['orders_id'];?>" <?php echo $checkbox;?> name="order_no[]" id="order_no">
+<?php } ?>
+</td>
                 <td class="dataTableContent" align="right"><?php echo $show_difference . $orders->fields['orders_id']; ?></td>
                 <td class="dataTableContent" align="left" width="50"><?php echo $show_payment_type; ?></td>
                 <td class="dataTableContent"><?php echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW . ' ' . TABLE_HEADING_CUSTOMERS) . '</a>&nbsp;' . $orders->fields['customers_name'] . ($orders->fields['customers_company'] != '' ? '<br />' . $orders->fields['customers_company'] : ''); ?></td>
@@ -890,7 +991,14 @@ if (($_GET['page'] == '' or $_GET['page'] <= 1) and $_GET['oID'] != '') {
                 <td class="dataTableContent" align="right"><?php echo $orders->fields['orders_status_name']; ?></td>
                 <td class="dataTableContent" align="center"><?php echo (zen_get_orders_comments($orders->fields['orders_id']) == '' ? '' : zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', TEXT_COMMENTS_YES, 16, 16)); ?></td>
 
-                <td class="dataTableContent" align="right"><?php echo '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $orders->fields['orders_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; ?><?php if (isset($oInfo) && is_object($oInfo) && ($orders->fields['orders_id'] == $oInfo->orders_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID')) . 'oID=' . $orders->fields['orders_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right">
+				<?php 
+									
+									if(in_array($orders->fields['order_no'],$fial_orders_no)){
+									 echo '<a href="'.zen_href_link(FILENAME_ORDERS, 'action=update_orders_id_info&orders_id=' . $orders->fields['orders_id'], 'NONSSL').'" target="_blank">Update billing info</a>';
+									}
+									?>
+				<?php echo '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $orders->fields['orders_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_EDIT) . '</a>'; ?><?php if (isset($oInfo) && is_object($oInfo) && ($orders->fields['orders_id'] == $oInfo->orders_id)) { echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID')) . 'oID=' . $orders->fields['orders_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
       $orders->MoveNext();
@@ -918,10 +1026,20 @@ if (($_GET['page'] == '' or $_GET['page'] <= 1) and $_GET['oID'] != '') {
                   </tr>
 <?php
   }
-?>
+?><tr>
+								   <td class="smallText" align="left" colspan="2" style="text-align:left;">
+								   <?php 
+								   //echo zen_image_submit('button_save.gif', IMAGE_SAVE,'  onclick="return  submit_choice_orders_no(document.choice_orders_no);" ') ;
+								    ?>
+<input type="submit" value="提交预报到4px" onclick="return  submit_choice_orders_no(document.choice_orders_no);">
+									<br /><br /><span id="show_send_forecast_loading"><?php echo $get_send_forecast_info['message'];?></span>
+								   </td>
+								   </tr>
                 </table></td>
               </tr>
-            </table></td>
+            </table>
+			</form></td>
+			</td>
 <?php
   $heading = array();
   $contents = array();

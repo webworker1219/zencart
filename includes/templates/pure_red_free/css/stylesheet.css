@@ -260,7 +260,8 @@ ul.inline-list li {
 #mainWrapper {
 	background-color: #ffffff;
 	text-align: left;
-	width: 969px;
+	/*width: 969px;*/
+	width: 1200px;
 	vertical-align: top;
 /*	border: 1px solid #9a9a9a;*/
 	}

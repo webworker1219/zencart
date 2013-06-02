@@ -131,6 +131,34 @@ if (isset($_SESSION['cart']->cartID)) {
     $comments = $_SESSION['comments'];
   }
 
+  //4px 
+	// require(DIR_WS_CLASSES . 'DSFShipping.php');
+  //$objDSFShipping = new DSFShipping();
+  $country_info = zen_get_countries($order->delivery['country_id'], true);
+  //var_dump($country_info, $total_weight);
+  //$dsf_shippings = $objDSFShipping->calculate($country_info['countries_iso_code_2'], $total_weight);
+	$product_id_array = $_SESSION['cart']->contents;
+	$calculation_total_weight = checking_whether_fee_shipping($product_id_array,$total_weight);
+  $new_Shipping_4px  = new Shipping_4px();
+  $get_shipping_list = $calculation_total_weight>0?$new_Shipping_4px->get_list_shipping_estimates($order->delivery['country_id'],$calculation_total_weight/1000,$_SESSION['currency']):array();
+  $shipping_4px      = array();
+	if(!empty($get_shipping_list)){
+	  foreach($get_shipping_list as $key=>$value){
+	    $get_max_shipping_weight  = $new_Shipping_4px->get_shipping_max_weight($value['pr_id']);
+			$shipping_price = (int)$value['shipping_price'];
+		if($calculation_total_weight/1000>=$get_max_shipping_weight or $shipping_price==false){
+		  continue;
+		}
+	    $shipping_4px[$key]['id'] = $value['pk_code'];
+			$shipping_4px[$key]['module'] = $value['pr_name'].($value['remark']!=''? '' : '('.$value['remark'].')'); 
+	    $shipping_4px[$key]['methods'] = array(array('id'=>$value['pk_code'],
+	                                                'title'=>$value['remark'],
+													'cost'=>$value['shipping_price']+$value['shipping_fuel']+$value['shipping_other']));
+	  }
+		//$free_shipping=true;
+		$count_shipping_number=count($shipping_4px);
+	}
+  //4px end
 
 // process the selected shipping method
   if ( isset($_POST['action']) && ($_POST['action'] == 'process') ) {
@@ -139,8 +167,8 @@ if (isset($_SESSION['cart']->cartID)) {
     }
     $comments = $_SESSION['comments'];
     $quote = array();
-
-    if ( (zen_count_shipping_modules() > 0) || ($free_shipping == true) ) {
+    $count_shipping_number = $count_shipping_number>0?$count_shipping_number:zen_count_shipping_modules();
+    if ( ($count_shipping_number> 0) || ($free_shipping == true) ) {
       if ( (isset($_POST['shipping'])) && (strpos($_POST['shipping'], '_')) ) {
         /**
          * check to be sure submitted data hasn't been tampered with
@@ -171,7 +199,26 @@ if (isset($_SESSION['cart']->cartID)) {
             }
           }
         } else {
-          $_SESSION['shipping'] = false;
+          //4px 
+          $is_dsf_shipping = false;
+          foreach ($shipping_4px as $dsf_shipping) {
+            if ($dsf_shipping['id'] == $module) {
+              $dsf_shipping['methods'][0]['cost'] += $insurance_checked;
+							if($_POST['insurance_checked']){
+								$insurance_name = '(Insurance Fee:'.$_SESSION['insurance']['price_str'].')';
+								$dsf_shipping['methods'][0]['title'] = $dsf_shipping['methods'][0]['title'].$insurance_name;
+							}
+              $_SESSION['shipping'] = $dsf_shipping['methods'][0];
+							//$_SESSION['shipping'] = $dsf_shipping['id'].'_'.$dsf_shipping['id'];
+              $is_dsf_shipping = true;
+              zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+              break;
+            }
+          }
+          if (!$is_dsf_shipping) {
+            $_SESSION['shipping'] = false;
+          }
+          //4px end
         }
       }
     } else {
@@ -183,7 +230,9 @@ if (isset($_SESSION['cart']->cartID)) {
 
 // get all available shipping quotes
   $quotes = $shipping_modules->quote();
-
+ //4px shipping
+  $quotes = array_merge($shipping_4px, $quotes);
+  //end 4px shipping
   // check that the currently selected shipping method is still valid (in case a zone restriction has disabled it, etc)
   if (isset($_SESSION['shipping']) && $_SESSION['shipping'] != FALSE && $_SESSION['shipping'] != '') {
     $checklist = array();

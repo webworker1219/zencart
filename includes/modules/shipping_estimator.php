@@ -133,6 +133,18 @@ if ($_SESSION['cart']->count_contents() > 0) {
   $shipping_modules = new shipping;
   $quotes = $shipping_modules->quote();
   //print_r($quotes);
+  
+  //4px shipping
+  require(DIR_WS_CLASSES . 'DSFShipping.php');
+  $objDSFShipping = new DSFShipping();
+  if (!$country_info) {
+    $country_info = $objDSFShipping->getCountryInfo($_SESSION['customer_id'], $sendto);
+  }
+  //var_dump($country_info, $total_weight);
+  $dsf_shippings = $objDSFShipping->calculate($country_info['countries_iso_code_2'], $total_weight);
+  
+  //end 4px shipping
+  
   //die('here');
   $order->info['subtotal'] = $_SESSION['cart']->show_total();
 
@@ -162,6 +174,31 @@ if ($_SESSION['cart']->count_contents() > 0) {
   } else {
     $free_shipping = false;
   }
+
+	function get_countries_id_info_mzt($countries_2code=null){
+   global $db;
+   $get_result_info  = $db->Execute("select countries_id from ".TABLE_COUNTRIES." WHERE countries_iso_code_2='".$countries_2code."'");
+   return $get_result_info->fields['countries_id'];
+  }
+  $new_Shipping_4px  = new Shipping_4px();
+  $countries_id_info = get_countries_id_info_mzt($country_info['countries_iso_code_2']);
+  $get_shipping_list = $total_weight>0?$new_Shipping_4px->get_list_shipping_estimates($countries_id_info,$total_weight/1000,$_SESSION['currency']):array();
+  $shipping_4px      = array();
+	if(!empty($get_shipping_list)){
+	  foreach($get_shipping_list as $key=>$value){
+	    $get_max_shipping_weight  = $new_Shipping_4px->get_shipping_max_weight($value['pr_id']);
+		$final_shipping_fee = $value['shipping_price']+$value['shipping_fuel']+$value['shipping_other'];
+		if($total_weight>=$get_max_shipping_weight or $value['shipping_price']==0){//µÃµ½ÎïÁ÷µÄ×î´óÔËÊäÖØÁ¿£¬ºÍÔËÊä¼Û¸ñÎª0 ¾Í²»Êä³ö
+		  continue;
+		}
+	    $shipping_4px[$key]['id'] = $value['pk_code'];
+	    $shipping_4px[$key]['module'] = $value['pr_name'];
+	    $shipping_4px[$key]['methods'] = array(array('id'=>$value['pk_code'],
+	                                                'title'=>$value['remark'],
+													'cost'=>$final_shipping_fee));
+	  }
+	}
+  $quotes = array_merge($shipping_4px, $quotes);
   // begin shipping cost
   if(!$free_shipping && $_SESSION['cart']->get_content_type() !== 'virtual'){
     if (zen_not_null($_POST['scid'])){

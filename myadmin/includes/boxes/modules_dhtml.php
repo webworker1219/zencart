@@ -10,7 +10,6 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
-;
 $za_contents = array();
 
 if (menu_header_visible('Modules')=='true') {
@@ -21,7 +20,7 @@ if (menu_header_visible('Modules')=='true') {
                     array( 'page' => FILENAME_MODULES, 'box' => BOX_MODULES_SHIPPING, 'set' => 'set=shipping'),
                     array( 'page' => FILENAME_MODULES, 'box' => BOX_MODULES_ORDER_TOTAL, 'set' => 'set=ordertotal'),
                     array( 'page' => 'dsf_shipping.php', 'box' => BOX_MODULES_DSF_SHIPPING, 'set' => ''),
-					array( 'page' => 'shipping_4px.php', 'box' => 'Shipping', 'set' => '')
+					array( 'page' => 'shipping_4px.php', 'box' => BOX_MODULES_DSF_SHIPPING, 'set' => 'set=shipping')
                   );
 
   foreach ($options as $key => $value)
