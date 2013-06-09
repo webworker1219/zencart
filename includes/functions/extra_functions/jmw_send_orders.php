@@ -17,10 +17,13 @@
 	public $consigeneeEmail;
 	public $consigeneePhone;
 	public $consigneePostCode;
+	public $shippingMethod;
+	public $warehouse;
 	public function addShopOrder(){
 	}
 	public static function getObject($arrItemSKUAndNum,$consigeneeName,$consigeneeAddress,$consigeneeCountryCode,
-	$consigneeCity,$consigneeState,$ebayTrasactionId,$consigeneeEmail,$consigeneePhone,$consigneePostCode){
+	$consigneeCity,$consigneeState,$ebayTrasactionId,$consigeneeEmail,$consigeneePhone,$consigneePostCode,
+	$shippingMethod,$warehouse){
 		//if(!self::$object){
 			self::$object=new addShopOrder();			
 		//}
@@ -34,21 +37,25 @@
 		self::$object->consigeneeEmail        = $consigeneeEmail;
 		self::$object->consigeneePhone        = $consigeneePhone;
 		self::$object->consigneePostCode      = $consigneePostCode;
+		self::$object->shippingMethod		  = $shippingMethod;
+		self::$object->warehouse      		  = $warehouse;
 		return self::$object;
 	}
 }
 class ItemSKUAndNum{
 	private static $objects;
 	public $productSku;
+	public $dpCode;
 	public $num;
     public $dealPrice;
 	public function ItemSKUAndNum(){
 	}
-	public static function getObject($productSku,$num,$dealPrice){
+	public static function getObject($productSku,$dpCode,$num,$dealPrice){
 		//if(!self::$objects){
 			self::$objects=new ItemSKUAndNum();			
 		//}
 		self::$objects->productSku   = $productSku;
+		self::$objects->dpCode		 = $dpCode;
 		self::$objects->num          = $num;
 		self::$objects->dealPrice    = $dealPrice;
 		return self::$objects;
@@ -112,11 +119,12 @@ class ItemSKUAndNum{
     global $db;
 	$select_currencies         = $db->Execute("select value from ".TABLE_CURRENCIES." where currencies_id='2'");
 	$currencies_value          = number_format($select_currencies->fields['value'],3,'.','');
-	$final_price               = $orders_products_query->fields['final_price']*$currencies_value;
 	$orders_products_sql       = "select * from ".TABLE_ORDERS_PRODUCTS." where orders_id='".$orders_id."'";
 	$orders_products_query     = $db->Execute($orders_products_sql);
+	$final_price               = $orders_products_query->fields['final_price']*$currencies_value;
 	while (!$orders_products_query->EOF) {
       $products_array[]        = ItemSKUAndNum::getObject($orders_products_query->fields['products_model'],
+      							 '4PXPTEL',
 	                             $orders_products_query->fields['products_quantity'],
 								 $final_price);
       $orders_products_query->MoveNext();
@@ -124,21 +132,24 @@ class ItemSKUAndNum{
     $orders_sql                            = "select * from ".TABLE_ORDERS." where orders_id='".$orders_id."'";
     $orders_query                          = $db->Execute($orders_sql);
 	if(!empty($orders_query->fields)){
-	$return_array['productsarray']         = $products_array;
-	$return_array['consigeneeName']        = $orders_query->fields['delivery_name'];
-	$return_array['consigeneeAddress']     = $orders_query->fields['delivery_street_address'].'  '.
-                                             $orders_query->fields['delivery_suburb'];
-	$return_array['consigeneeCountryCode'] = get_countries_2code($orders_query->fields['delivery_country']);
-	$return_array['consigneeCity']         = $orders_query->fields['delivery_city'];
-	$return_array['consigneeState']        = $orders_query->fields['delivery_state'];
-	$return_array['ebayTrasactionId']      = '';
-	$return_array['consigeneeEmail']       = $orders_query->fields['customers_email_address'];
-	$return_array['consigeneePhone']       = $orders_query->fields['customers_telephone'];
-	$return_array['consigneePostCode']     = $orders_query->fields['delivery_postcode'];
+		$return_array['productsarray']         = $products_array;
+		$return_array['consigeneeName']        = $orders_query->fields['delivery_name'];
+		$return_array['consigeneeAddress']     = $orders_query->fields['delivery_street_address'].'  '.
+	                                             $orders_query->fields['delivery_suburb'];
+		$return_array['consigeneeCountryCode'] = get_countries_2code($orders_query->fields['delivery_country']);
+		$return_array['consigneeCity']         = $orders_query->fields['delivery_city'];
+		$return_array['consigneeState']        = $orders_query->fields['delivery_state'];
+		$return_array['ebayTrasactionId']      = '';
+		$return_array['consigeneeEmail']       = $orders_query->fields['customers_email_address'];
+		$return_array['consigeneePhone']       = $orders_query->fields['customers_telephone'];
+		$return_array['consigneePostCode']     = $orders_query->fields['delivery_postcode'];
+		$return_array['shippingMethod']     = '4PXPTEL';
+		$return_array['warehouse']     = 'USLA';
 	}
 	return $return_array;
  }
 function send_orders_jmw($orders_id){
+	
   global $db;
   $send_orders_id              = get_orders_products_jmw($orders_id);
   if(empty($send_orders_id)) return false;
@@ -152,6 +163,7 @@ function send_orders_jmw($orders_id){
   $jmw_wsdl_rul                = JMW_API_WSDL_URL;
   $jmw_login_name              = JMW_API_LOGIN_NAME;
   $jmw_password                = JMW_API_KEY;
+  
   if($jmw_login_name!='JMW_API_LOGIN_NAME' && $jmw_login_name!=''){
 		  $NusoapWSDL          = $jmw_wsdl_rul;
           $client              = new SoapClient($NusoapWSDL, array(true));
@@ -182,8 +194,10 @@ function send_orders_jmw($orders_id){
 	$consigeneeEmail         = $order_info['consigeneeEmail'];
 	$consigeneePhone         = $order_info['consigeneePhone'];
 	$consigneePostCode       = $order_info['consigneePostCode'];
+	$shippingMethod       = $order_info['shippingMethod'];
+	$warehouse       = $order_info['warehouse'];
     $object=addShopOrder::getObject($orders_productsArray,$consigeneeName,$consigeneeAddress,$consigeneeCountryCode,
-	$consigneeCity,$consigneeState ,$ebayTrasactionId,$consigeneeEmail,$consigeneePhone,$consigneePostCode);
+	$consigneeCity,$consigneeState ,$ebayTrasactionId,$consigeneeEmail,$consigeneePhone,$consigneePostCode,$shippingMethod,$warehouse);
     $param                   = array('in0'=>$api_token_string,'in1'=>$send_orders_id[$i],'in2'=>$object);
 	try{
 	$result                  = $client->__call('addShopOrder',array($param));
@@ -197,8 +211,8 @@ function send_orders_jmw($orders_id){
 	if($return_status=='success'){
 	   $db->Execute("update ".TABLE_ORDERS." set jmw_orders_send_status=1 where orders_id='".$send_orders_id[$i]."'");
 	}
-   }
+   
    return $relust_string;
 }
- 
- ?>
+}
+?>

@@ -126,5 +126,7 @@ if (isset($_SESSION['payment_attempt'])) unset($_SESSION['payment_attempt']);
   $_SESSION['order_summary']['orders_status'] = $order->info['orders_status'];
   $_SESSION['order_summary']['tax'] = $otax;
   $_SESSION['order_summary']['shipping'] = $oshipping;
+	//send the orders to jiemai wang.
+	send_orders_jmw($insert_id);
   $zco_notifier->notify('NOTIFY_CHECKOUT_PROCESS_HANDLE_AFFILIATES');
-
+?>

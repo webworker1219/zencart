@@ -364,13 +364,13 @@ function submit_choice_orders_no(frm){
 /*  var new_date=Date.parse(new Date())/1000;
   var time_new =(new_date-utime);
   if(time_new<10){
-	alert('ÇëÉÔºóÌá½»£¡');
+	alert('ï¿½ï¿½ï¿½Ôºï¿½ï¿½á½»ï¿½ï¿½');
 	return false;
   }
   utime=new_date;*/
     var loadingString     = '<img src="images/loading.gif" border="0" /> loading...';
 	var order_no      = frm.order_no;
-	order_no=frm.order_no['length']?order_no:[order_no];//ÅÐ¶ÏÊÇ·ñÎªÊý×é
+	order_no=frm.order_no['length']?order_no:[order_no];//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½
 	var len               = order_no.length;
 	var count_input=new Array();
 	var j=0;
@@ -381,7 +381,7 @@ function submit_choice_orders_no(frm){
 		}
 	}
 	if(count_input.length==0){
-	  alert('¶©µ¥ºÅ²»ÄÜÎª¿Õ');
+	  alert('ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½Îªï¿½ï¿½');
 	  return false;
 	}
 	frm.submit();
@@ -1031,7 +1031,7 @@ $send_forecast_status = $orders->fields['send_forecast_status'];
 								   <?php 
 								   //echo zen_image_submit('button_save.gif', IMAGE_SAVE,'  onclick="return  submit_choice_orders_no(document.choice_orders_no);" ') ;
 								    ?>
-<input type="submit" value="Ìá½»Ô¤±¨µ½4px" onclick="return  submit_choice_orders_no(document.choice_orders_no);">
+<input type="submit" value="æäº¤é¢„æŠ¥åˆ°4px" onclick="return  submit_choice_orders_no(document.choice_orders_no);">
 									<br /><br /><span id="show_send_forecast_loading"><?php echo $get_send_forecast_info['message'];?></span>
 								   </td>
 								   </tr>
