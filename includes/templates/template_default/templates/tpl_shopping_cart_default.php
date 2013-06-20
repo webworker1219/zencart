@@ -54,6 +54,7 @@
         <th scope="col" id="scQuantityHeading"><?php echo TABLE_HEADING_QUANTITY; ?></th>
         <th scope="col" id="scUpdateQuantity">&nbsp;</th>
         <th scope="col" id="scProductsHeading"><?php echo TABLE_HEADING_PRODUCTS; ?></th>
+        <th scope="col" id="scwh">warehouse</th>
         <th scope="col" id="scUnitHeading"><?php echo TABLE_HEADING_PRICE; ?></th>
         <th scope="col" id="scTotalHeading"><?php echo TABLE_HEADING_TOTAL; ?></th>
         <th scope="col" id="scRemoveHeading">&nbsp;</th>
@@ -104,6 +105,7 @@
   }
 ?>
        </td>
+       <td class="cartUnitDisplay"><?php echo $product['wareHouse']; ?></td>
        <td class="cartUnitDisplay"><?php echo $product['productsPriceEach']; ?></td>
        <td class="cartTotalDisplay"><?php echo $product['productsPrice']; ?></td>
        <td class="cartRemoveItemDisplay">
@@ -129,7 +131,16 @@
 <br class="clearBoth" />
 
 <!--bof shopping cart buttons-->
-<div class="buttonRow forward"><?php echo '<a href="' . zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_CHECKOUT, BUTTON_CHECKOUT_ALT) . '</a>'; ?></div>
+<div class="buttonRow forward">
+	<?php 
+		if($isSameWareHouse){
+			echo '<a href="' . zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_CHECKOUT, BUTTON_CHECKOUT_ALT) . '</a>'; 
+		}else{
+			echo '<a href="' . zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL') . '"onclick="alert(\'The products '.$product['productsName'].' are not in same warehouse, Please delete the products not in one warehouse\');return false;">' . zen_image_button(BUTTON_IMAGE_CHECKOUT, BUTTON_CHECKOUT_ALT) . '</a>';
+		}
+		 
+	?>
+</div>
 <div class="buttonRow back"><?php echo zen_back_link() . zen_image_button(BUTTON_IMAGE_CONTINUE_SHOPPING, BUTTON_CONTINUE_SHOPPING_ALT) . '</a>'; ?></div>
 <?php
 // show update cart button

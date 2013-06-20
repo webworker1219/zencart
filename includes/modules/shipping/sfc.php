@@ -100,13 +100,13 @@
       $ch = curl_init(REQUIRERATE . $profile);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       //set the proxy for the curl.
-		curl_setopt($ch,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
-		curl_setopt($ch,CURLOPT_PROXYPORT , 8080);
-		curl_setopt($ch,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
+//		curl_setopt($ch,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
+//		curl_setopt($ch,CURLOPT_PROXYPORT , 8080);
+//		curl_setopt($ch,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
       // set proxy options if configured
       if (MODULE_SHIPPING_SFC_CURL_PROXY_REQUIRED == 'True' && MODULE_SHIPPING_SFC_CURL_PROXY_SERVER_DETAILS != '') {
-//        curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, TRUE);
-//        curl_setopt($ch, CURLOPT_PROXY, MODULE_SHIPPING_SFC_CURL_PROXY_SERVER_DETAILS);
+        curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, TRUE);
+        curl_setopt($ch, CURLOPT_PROXY, MODULE_SHIPPING_SFC_CURL_PROXY_SERVER_DETAILS);
       }
       $content = curl_exec($ch);
       curl_close($ch);
@@ -173,7 +173,6 @@
       if ($this->tax_class > 0) {
         $this->quotes['tax'] = zen_get_tax_rate($this->tax_class, $order->delivery['country']['id'], $order->delivery['zone_id']);
       }
-
       return $this->quotes;
     }  
 
@@ -207,13 +206,13 @@
 
       // 通过代理服务器安装的代码
        $ch = curl_init(REQUIRESHIPTYPE);
-//       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//       curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, TRUE);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, TRUE);
        
        //set the proxy for the curl.
-		curl_setopt($ch,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
-		curl_setopt($ch,CURLOPT_PROXYPORT , 8080);
-		curl_setopt($ch,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
+//		curl_setopt($ch,CURLOPT_PROXY , 'inet-proxy-a.appl.swissbank.com');
+//		curl_setopt($ch,CURLOPT_PROXYPORT , 8080);
+//		curl_setopt($ch,CURLOPT_PROXYUSERPWD , 'weicl:Ab123456');
        
        $content = curl_exec($ch);
        curl_close($ch);

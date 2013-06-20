@@ -25,7 +25,7 @@
 define('NAVBAR_TITLE', '购物车');
 define('HEADING_TITLE', '购物车中的商品:');
 define('HEADING_TITLE_EMPTY', '您的购物车');
-define('TEXT_INFORMATION', '可以在这里输入有关购物车的说明。 (includes/languages/schinese/shopping_cart.php)');
+define('TEXT_INFORMATION', '友情提示:如果购物车中有多个商品.同一个购物车中的商品只能从同一个仓库发货.请保持商品来自同一个仓库.否则无法发货.');
 define('TABLE_HEADING_REMOVE', '删除');
 define('TABLE_HEADING_QUANTITY', '数量');
 define('TABLE_HEADING_MODEL', '型号');

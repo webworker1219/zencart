@@ -83,7 +83,6 @@ class ApiBase {
 		   $item['final_price']       = $order_product_query->fields['final_price'];
 		   $item['products_quantity'] = $order_product_query->fields['products_quantity'];
 		   $item['manufacturers_id']  = $order_product_query->fields['manufacturers_id'];
-		   
 		   $return[] = $item;
 		   $order_product_query->MoveNext();
 	   }

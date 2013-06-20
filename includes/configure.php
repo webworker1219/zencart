@@ -39,10 +39,10 @@
 
 // * DIR_FS_* = Filesystem directories (local/physical)
   //the following path is a COMPLETE path to your Zen Cart files. eg: /var/www/vhost/accountname/public_html/store/
-  define('DIR_FS_CATALOG', 'c:/cloudwei/xampp/htdocs/zencartplugin/');
+  define('DIR_FS_CATALOG', 'd:/xampp/htdocs/zencartplugin/');
 
   //the following path is a COMPLETE path to the /logs/ folder  eg: /var/www/vhost/accountname/public_html/store/logs ... and no trailing slash
-  define('DIR_FS_LOGS', 'c:/cloudwei/xampp/htdocs/zencartplugin/logs');
+  define('DIR_FS_LOGS', 'd:/xampp/htdocs/zencartplugin/logs');
 
   define('DIR_FS_DOWNLOAD', DIR_FS_CATALOG . 'download/');
   define('DIR_FS_DOWNLOAD_PUBLIC', DIR_FS_CATALOG . 'pub/');
@@ -52,12 +52,12 @@
 
 // define our database connection
   define('DB_TYPE', 'mysql');
-  define('DB_PREFIX', 'ch_new_');
+  define('DB_PREFIX', '');
   define('DB_CHARSET', 'utf8');
   define('DB_SERVER', 'localhost');
   define('DB_SERVER_USERNAME', 'root');
   define('DB_SERVER_PASSWORD', '');
-  define('DB_DATABASE', 'zencart');
+  define('DB_DATABASE', 'gaomaimai');
 
   // The next 2 "defines" are for SQL cache support.
   // For SQL_CACHE_METHOD, you can select from:  none, database, or file
@@ -65,6 +65,6 @@
   // or webserver user has write privileges (chmod 666 or 777). We recommend using the "cache" folder inside the Zen Cart folder
   // ie: /path/to/your/webspace/public_html/zen/cache   -- leave no trailing slash  
   define('SQL_CACHE_METHOD', 'file'); 
-  define('DIR_FS_SQL_CACHE', 'c:/cloudwei/xampp/htdocs/zencartplugin/cache');
+  define('DIR_FS_SQL_CACHE', 'd:/xampp/htdocs/zencartplugin/cache');
 
 // EOF

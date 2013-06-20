@@ -17,19 +17,12 @@
 	$jmw_password                = JMW_API_KEY;
 	$api_token_string=JMW_API_USER_TOKEN; //借卖网会员Token认证
   
-  	define(PROXY_ADDRESS,'inet-proxy-a.appl.swissbank.com');
-	define(PROXY_PORT,8080);
-	define(PROXY_USERNAME,'weicl');
-	define(PROXY_PASS,'Ab123456');
   
   if(empty($api_token_string) ||  empty($jmw_login_name) || empty($jmw_password)){
   	$param               = array('in0'=>$jmw_login_name ,'in1'=>$jmw_password);
  	try {
  		$jmwWSDLClient = new SoapClient("http://www.jiemai.com/services/JieMaiService?wsdl", array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => PROXY_PORT,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+											true));
  		$result              = $jmwWSDLClient->__call('fetchToken',array($param));
  	}catch (SoapFault  $e){
  		 print_r($e);
@@ -92,11 +85,7 @@ function handle_add_fail_products($products_sku,$add_to_categories,$price_rate_c
 	$param = array('in0'=>$api_token_string,'in1'=>$products_sku,'in2'=>'','in3'=>true);
 	$startTime = get_microtime();
 	try{
-		$jmwWSDLQueryClient = new SoapClient("http://query.jiemai.com/services/UsJieMaiSlService?wsdl",array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+		$jmwWSDLQueryClient = new SoapClient("http://query.jiemai.com/services/UsJieMaiSlService?wsdl",array(true));
 		$result  = $jmwWSDLQueryClient->__call('getProductDetail',array($param));
 	}catch(SOAPFault $e){
 	  	print_r($e);
@@ -128,10 +117,8 @@ function handle_add_fail_products($products_sku,$add_to_categories,$price_rate_c
         		$productsarrays = $productsarray[$i];
         	}
 			$products_id = get_association_sku_productsid($productsarrays->sku);
-			//echo '----------------------------'.$productsarrays->sku.'--------------------------';
 			if(empty($products_id)){
-				$_products_image = $NewHandleImages->products_urlimage_handle($productsarrays->picInfo->PicInfo,$products_id);
-				
+				$_products_image = $NewHandleImages->products_urlimage_handle_sku($productsarrays->picInfo->PicInfo,$productsarrays->sku);
 				if(!empty($_products_image)){
 					
 					$temp_file = explode(',',$_products_image) ;
@@ -153,6 +140,10 @@ function handle_add_fail_products($products_sku,$add_to_categories,$price_rate_c
 						$products_weight         = zen_db_prepare_input($productsarrays->weight);
 						$tmp_value               = zen_db_prepare_input($productsarrays->manufacturers_id);
 						$manufacturers_id        = (!zen_not_null($tmp_value) || $tmp_value=='' || $tmp_value == 0) ? 0 : $tmp_value;
+						//增加借卖网的compId到manufacturers_id内
+						$producturl = $productsarrays->producturl;
+						$manufacturers_id=substr($producturl,strpos($producturl,'=')+1,6);
+						var_dump($manufacturers_id);
 						$sql_data_array = array(
 							'products_quantity'               => $products_quantity,
 							'products_type'                   => 1,
@@ -421,11 +412,7 @@ $new_jmw_tree=new Jmw_Tree();
 if($_GET['action']=='request_categories'){ //同步借卖网分类
   $categoies_param    = array('usertoken'=>$api_token_string);
   try {
-  	$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROX_YPASS));
+  	$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(true));
 	$result_categories  = $jmwWSDLClient->__call('getAllCategories',array($categoies_param));
   }catch (SoapFault $e){
   	print_r($e);exit;
@@ -484,11 +471,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
      $updateproduct      = new UpdateProductCondtion($name,$sku,$categoryId,$startPutawayDate,$endPutawayDate,$whCode,$sort,$country);
 	 $param              = array('in0'=>$api_token_string,'in1'=>$updateproduct,'in2'=>$current_products,'in3'=>$every_page_n);
 	
-	 $jmwWSDLQueryClient	= new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl', array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+	 $jmwWSDLQueryClient	= new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl', array(true));
 	 $result             = $jmwWSDLQueryClient->__call('queryUpdatedProduct',array($param));
 	 $total_products     = $result->out->total;//查询得到总产品数
 	 $total_page         = ceil($total_products/$every_page_n);//总页面数
@@ -571,11 +554,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
      $delete_products_id = select_products_sku($_POST['products_id']);
      $param              = array('usertoken'=>$api_token_string,'arraySku'=>$delete_products_id,'status'=>'OFF');
      try {
-     	$jmwWSDLClient	= new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+     	$jmwWSDLClient	= new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(true));
      	$result = $jmwWSDLClient->__call('shelveProductFromShop',array($param));
      }catch (SOAPFault $e ){
      	print_r($e);
@@ -592,11 +571,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
 	 $price_rate         = JMW_API_PRICE_RATE; //更新的时候按照设置的更新价格比例
      $param              = array('in0'=>$api_token_string,'in1'=>$_POST['products_sku'],'in2'=>'','in3'=>'');
      try {
-     	$jmwWSDLQueryClient = new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+     	$jmwWSDLQueryClient = new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl',array(true));
      	$result             = $jmwWSDLQueryClient->__call('getProductDetail',array($param));
      }catch (SoapFault $e){
      	print_r($e);exit;
@@ -681,11 +656,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
 	 }
      echo'<br />更新请求的sku产品成功<br /><br />';
  }elseif ($_GET['action'] =='queryWhCode'){ //查询借卖网仓库
- 	$jmwWSDLClient	=	 new  SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+ 	$jmwWSDLClient	=	 new  SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(true));
  	$param	=	array('usertoken'=>$api_token_string);
  	try {
  		$jmwReturn = $jmwWSDLClient->__call('queryWhCode',array($param));
@@ -707,11 +678,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
  	$jmwOrderID = $post['jmwOrderID'] ;
  	$param = array('usertoken'=>$api_token_string,'jmwOrderID'=>$jmwOrderID,'orderId'=>$orders_id);
  	try {
- 		$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROX_YPASS));
+ 		$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(true));
  		$result = $jmwWSDLClient->__call('getJMWOrderStatus',array($param));
  	}catch (SoapFault $e){
  		print_r($e);
@@ -730,11 +697,7 @@ if($_GET['action']=='request_categories'){ //同步借卖网分类
 	 $param = array('usertoken' => $api_token_string ,'callBack' => 'N','shopName' => $post['shopName'] , 'shopUrl'=>$post['shopUrl'],
 	 'serviceUrl'=>$post['serviceUrl'],'callType'=>'0');
 	 try {
-	 	$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS)) ;
+	 	$jmwWSDLClient = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl',array(true)) ;
 	 	$result = $jmwWSDLClient->__call('setCallServiceAPI',array($param));
 	 }catch (SoapFault $e){
 	 	print_r($e);
@@ -779,11 +742,7 @@ $current_page       = empty($_GET['current_page_value'])?0:$_GET['current_page_v
 	 $productobject      = new ProductCondtion($name,$sku,$categoryId,$startPrice,$endPrice,$startPutawayDate,$endPutawayDate,$whCode,$sort,$country);
 	 $param              = array('in0'=>$api_token_string,'in1'=>$productobject,'in2'=>$current_products,'in3'=>$every_page_n);
 	 try{
-	 	 $queryClient	= new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl', array(
-											'proxy_host'     => PROXY_ADDRESS,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => PROXY_USERNAME,
-                                            'proxy_password' => PROXY_PASS));
+	 	 $queryClient	= new SoapClient('http://query.jiemai.com/services/UsJieMaiSlService?wsdl', array(true));
 		 $result       	= $queryClient->__call('queryProduct',array($param));//得到查询结果集
 	 }catch(SOAPFault $e){
 	   	  print_r($e);

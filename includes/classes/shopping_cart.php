@@ -1092,7 +1092,7 @@ class shoppingCart extends base {
     reset($this->contents);
     while (list($products_id, ) = each($this->contents)) {
       $products_query = "select p.products_id, p.master_categories_id, p.products_status, pd.products_name, p.products_model, p.products_image,
-                                  p.products_price, p.products_weight, p.products_tax_class_id,
+                                  p.products_price, p.products_weight, p.products_tax_class_id,p.products_jmw_sku,
                                   p.products_quantity_order_min, p.products_quantity_order_units, p.products_quantity_order_max,
                                   p.product_is_free, p.products_priced_by_attribute,
                                   p.products_discount_type, p.products_discount_type_from
@@ -1100,9 +1100,8 @@ class shoppingCart extends base {
                            where p.products_id = '" . (int)$products_id . "'
                            and pd.products_id = p.products_id
                            and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'";
-
+	
       if ($products = $db->Execute($products_query)) {
-
         $prid = $products->fields['products_id'];
         $products_price = $products->fields['products_price'];
         //fix here

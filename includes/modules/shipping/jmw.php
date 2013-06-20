@@ -23,7 +23,7 @@
 // +----------------------------------------------------------------------+
 // $Id: jmw, v1.0 2013-06-07 Cloud Wei $
 //
-
+require (DIR_WS_FUNCTIONS . 'queryJMW.php');
 class jmw {
 	var $code, $title, $description, $icon, $enabled, $num_zones, $num_tables, $delivery_geozone, $order_total;
 
@@ -187,15 +187,33 @@ class jmw {
 			'methods' => array ()
 		);
 		$orderProducts = $order->products;
-		$feebuffer=array();
+		$feebuffer = array ();
+		$factoryId='';
+		$imCode='';
+		$whCode='';
 		for ($j = 0; $j < count($orderProducts); $j++) {
 			/*借卖网商品 代码*/
 			$skuCode = $orderProducts[$j]['model'];
 			$skuArray = split('-', $skuCode);
-			$imCode = $skuArray[1] . '-' . $skuArray[2];
-			$whCode = $skuArray[3];
+			$skuLength = count($skuArray);
+			for($f=0;$f<$skuLength;$f++){
+				if ($f==0){
+					$factoryId=$skuArray[0];
+				}else if($f==$skuLength-1){
+					$whCode = $skuArray[$skuLength-1];
+				}else if($f==1){
+					$imCode=$skuArray[$f];
+				}else{
+					$imCode=$imCode.'-'.$skuArray[$f];
+				}
+			}
+			
+//			$factoryId=$skuArray[0];
+//			$imCode = $skuArray[1] . '-' . $skuArray[2].'-' . $skuArray[3];
+//			$whCode = $skuArray[count($skuArray)-1];
 			//订单中的产品id
-			$product_id = $orderProducts[$j]['id'];
+			$product_id = (split(':',$orderProducts[$j]['id']));
+			$product_id=$product_id[0];
 			//根据产品id查询借卖网中厂商id
 			$queryMunuIdSQL = 'select manufacturers_id from ' . TABLE_PRODUCTS . ' where products_id=' . $product_id;
 			$munuResult = $db->Execute($queryMunuIdSQL);
@@ -204,41 +222,46 @@ class jmw {
 			$bookingNum = $orderProducts[$j]['qty'];
 			//借卖网保险种类,低保
 			$sInsuType = 311;
-			$countryname = getCountryName($order->delivery['country']['id']);
+			$countryname = getJMWCountryName($order->delivery['country']['id']);
 			//根据国家代码转化为当前
 			$soConsigneecountry = convertCountryToJMW($order->delivery['country']['id']);
-			require (DIR_WS_FUNCTIONS . 'queryJMW.php');
 			$jmwdp = get_jmw_post_method($whCode);
 			foreach ($jmwdp as $dp) {
 				$rnd = mt_rand(0, 5000);
 				$totalfee = 0;
 				$dpCode = $dp->dpCode;
 				//通过仓库名,发送的国家名,发送的方式确定该运费是否已计算.
-				$deliverSummry=$whCode.'#'.$soConsigneecountry.'#'.$dpCode;
-				if($feebuffer[$deliverSummry]!=null){
-										$totalfee					 = $feebuffer[$deliverSummry];
-				}
+				$deliverSummry = $whCode . '#' . $soConsigneecountry . '#' . $dpCode;
+				
 				$shiptypename = $dp->dpEnName;
 				$deliverytime = $dp->dpNote;
 				$avalibleDeliver = checkDeliever($compId, $imCode, $dpCode, $rnd);
 				$code = json_decode(json_decode($avalibleDeliver))->code;
 				if ($code != -1) { //该仓库不能使用此种快递方式。
-					break;
+					continue;
 				} else {
+					if ($feebuffer[$deliverSummry] != null) {
+						$totalfee = $feebuffer[$deliverSummry];
+					}elseif($j>0){//上一个商品没有此快递方式.
+						//不选择此种快递方式.
+						continue;
+					}
 					$calculateFee = transfeeCalcute($compId, $imCode, $dpCode, $bookingNum, $sInsuType, $soConsigneecountry, $whCode, $rnd);
 					$feeygroup = json_decode(json_decode($calculateFee));
 					//				var_dump($feeygroup);
-					
+
 					if ($feeygroup != null) {
 						for ($i = 0; $i < count($feeygroup); $i++) {
 							$totalfee += $feeygroup[$i]->oefFee;
 						}
-						$this->quotes['methods'][] = array (
-							'id' => $dpCode,
-							'title' => $shiptypename . ' (' . $deliverytime . ' days)',
-							'cost' => $totalfee
-						);
-						$feebuffer[$deliverSummry]=$totalfee;
+						if($j == count($orderProducts)-1){
+							$this->quotes['methods'][] = array (
+								'id' => $dpCode,
+								'title' => $shiptypename . ' (' . $deliverytime . ' days)',
+								'cost' => $totalfee/6.1
+							);
+						}
+						$feebuffer[$deliverSummry] += $totalfee;
 					}
 				}
 			}
@@ -452,6 +475,30 @@ function convertCountryToJMW($localCountryId) {
 	switch ($localCountryId) {
 		case (223) :
 			$jmwCountryId = 71;
+			break;
+		case (44) :
+			$jmwCountryId = 1;
+			break;
+		case 101 :
+			$jmwCountryId = 101;
+			break;
+		case 112 :
+			$countryname = 17;
+			break;
+		case 113 :
+			$countryname = 4;
+			break;
+		case 176 :
+			$countryname = 213;
+			break;
+		case 230 :
+			$countryname = 23;
+			break;
+		case 231 :
+			$countryname = 118;
+			break;
+		case 232 :
+			$countryname = 119;
 			break;
 		default :
 			$jmwCountryId = 0;

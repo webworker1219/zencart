@@ -29,6 +29,6 @@
   // This should be before the zen_redirect:
   $zco_notifier->notify('NOTIFY_HEADER_END_CHECKOUT_PROCESS');
 
-  zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, (isset($_GET['action']) && $_GET['action'] == 'confirm' ? 'action=confirm' : ''), 'SSL'));
+//  zen_redirect(zen_href_link(FILENAME_CHECKOUT_SUCCESS, (isset($_GET['action']) && $_GET['action'] == 'confirm' ? 'action=confirm' : ''), 'SSL'));
 
   require(DIR_WS_INCLUDES . 'application_bottom.php');

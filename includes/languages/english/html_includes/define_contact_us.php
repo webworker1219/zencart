@@ -1,3 +1,4 @@
-<p><strong>Contact Us Sample Text ...</strong></p>
-<p>This section of text is from the Define Pages Editor located under Tools in the Admin.</p>
-<p>To remove this section of the text, delete it from the Define Pages Editor.</p>
+<p><strong>Contact Us </strong></p>
+<p>phone: (86)13691805594</p>
+<p>email: cloudwei.sz@gmail.com</p>
+<p>msn: bearAndDuct</p>

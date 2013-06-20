@@ -303,15 +303,11 @@ function update_jmw_config_info($username,$password){//更新配置文件中的�
 
 function handle_request_function($function_name,$parameter){//处理请求的接口函数，并返回请求的结果
    try{
-	   	$proxyAddress='inet-proxy-a.appl.swissbank.com';
-		$proxyPort='8080';
-		$proxyUserName='weicl';
-		$proxyPass='Ab123456';
-   		$jmwWSDLClient              = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl', array(
-											'proxy_host'     => $proxyAddress,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => $proxyUserName,
-                                            'proxy_password' => $proxyPass));
+//	   	$proxyAddress='inet-proxy-a.appl.swissbank.com';
+//		$proxyPort='8080';
+//		$proxyUserName='weicl';
+//		$proxyPass='Ab123456';
+   		$jmwWSDLClient              = new SoapClient('http://www.jiemai.com/services/JieMaiSlService?wsdl', array(true));
 		$parameter           = is_array($parameter)?$parameter:array($parameter);
    		$result              = $jmwWSDLClient->__call($function_name,array($parameter));
    }catch(SOAPFault $e) {
@@ -382,11 +378,7 @@ if (zen_not_null($action)) {
 		
 		$param               = array('in0'=>$jmw_login_name ,'in1'=>$jmw_password);
  		try {
- 			$jmwWSDLClient = new SoapClient("http://www.jiemai.com/services/JieMaiService?wsdl",array(
-											'proxy_host'     => $proxyAddress,
-                                            'proxy_port'     => 8080,
-                                            'proxy_login'    => $proxyUserName,
-                                            'proxy_password' => $proxyPass));
+ 			$jmwWSDLClient = new SoapClient("http://www.jiemai.com/services/JieMaiService?wsdl",array(true));
  			$result              = $jmwWSDLClient->__call('fetchToken',array($param));
  		}catch (SoapFault  $e){
  			 print_r($e);

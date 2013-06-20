@@ -58,6 +58,7 @@ $cartShowTotal = $currencies->format($_SESSION['cart']->show_total());
 
 $flagAnyOutOfStock = false;
 $products = $_SESSION['cart']->get_products();
+$isSameWareHouse=true;
 for ($i=0, $n=sizeof($products); $i<$n; $i++) {
   if (($i/2) == floor($i/2)) {
     $rowClass="rowEven";
@@ -147,6 +148,14 @@ for ($i=0, $n=sizeof($products); $i<$n; $i++) {
 //  $productsPriceTotal = $currencies->display_price($products[$i]['final_price'], zen_get_tax_rate($products[$i]['tax_class_id']), $products[$i]['quantity']) . ($products[$i]['onetime_charges'] != 0 ? '<br />' . $currencies->display_price($products[$i]['onetime_charges'], zen_get_tax_rate($products[$i]['tax_class_id']), 1) : '');
 //  $productsPriceTotal = $currencies->display_price($products[$i]['final_price'], zen_get_tax_rate($products[$i]['tax_class_id']), $products[$i]['quantity']) . ($products[$i]['onetime_charges'] != 0 ? '<br />' . $currencies->display_price($products[$i]['onetime_charges'], zen_get_tax_rate($products[$i]['tax_class_id']), 1) : '');
 //  echo  $currencies->rateAdjusted($tmp);
+	//增加仓库显示在产品列
+	$model=$products[$i]['model'];
+	$sku=explode('-',$model);
+	$wareHouse = $sku[count($sku)-1];
+	if($i!=0&&$lastProductWareHouse!=$wareHouse){
+		$isSameWareHouse=false;
+	}
+	$lastProductWareHouse=$wareHouse;
   $productArray[$i] = array('attributeHiddenField'=>$attributeHiddenField,
                             'flagStockCheck'=>$flagStockCheck,
                             'flagShowFixedQuantity'=>$showFixedQuantity,
@@ -159,6 +168,7 @@ for ($i=0, $n=sizeof($products); $i<$n; $i++) {
                             'showMinUnits'=>$showMinUnits,
                             'quantityField'=>$quantityField,
                             'buttonUpdate'=>$buttonUpdate,
+                            'wareHouse'=>$wareHouse,
                             'productsPrice'=>$productsPriceTotal,
                             'productsPriceEach'=>$productsPriceEach,
                             'rowClass'=>$rowClass,

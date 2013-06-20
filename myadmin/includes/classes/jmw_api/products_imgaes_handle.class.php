@@ -398,7 +398,7 @@ class ProductsImagesHandle {
 			//	$tempfile3 = DIR_FS_CATALOG_IMAGES . 'v/'.$foldDate.'/temp.txt' ;
 
 			//按照月份归类新增的产品，并分为大中小三种图片
-			$tempfile1 = DIR_FS_CATALOG_IMAGES . 'small/' . $foldDate . '/temp.txt';
+			$tempfile1 = DIR_FS_CATALOG_IMAGES . $foldDate . '/temp.txt';
 			$tempfile2 = DIR_FS_CATALOG_IMAGES . 'medium/' . $foldDate . '/temp.txt';
 			$tempfile3 = DIR_FS_CATALOG_IMAGES . 'large/' . $foldDate . '/temp.txt';
 			//如果没有目录则创建新的目录
@@ -588,7 +588,7 @@ class ProductsImagesHandle {
 			}
 
 		} else {
-			echo 'failed 没找到要下载的图�?!<br />';
+			echo 'failed 没找到要下载的图<br />';
 			if (is_array($existimgArray)) {
 				$products_image_name = $existimgArray[0];
 				//    $products_image_name_string = implode ( ',', $existimgArray);
@@ -712,9 +712,9 @@ function check_remote_file_exists($url) {
 	$curl = curl_init($url);
 	//设置参数
 	curl_setopt($curl, CURLOPT_NOBODY, true);
-	curl_setopt($curl, CURLOPT_PROXY, 'inet-proxy-a.appl.swissbank.com');
-	curl_setopt($curl, CURLOPT_PROXYPORT, 8080);
-	curl_setopt($curl, CURLOPT_PROXYUSERPWD, 'weicl:Ab123456');
+//	curl_setopt($curl, CURLOPT_PROXY, 'inet-proxy-a.appl.swissbank.com');
+//	curl_setopt($curl, CURLOPT_PROXYPORT, 8080);
+//	curl_setopt($curl, CURLOPT_PROXYUSERPWD, 'weicl:Ab123456');
 	//发出请求
 	$result = curl_exec($curl);
 	$found = false;
@@ -748,9 +748,9 @@ function loadRemoteImg($url = "", $filename = "") {
 	curl_setopt($hander, CURLOPT_FOLLOWLOCATION, 1);
 	curl_setopt($hander, CURLOPT_TIMEOUT, 60);
 	//set the proxy for the curl.
-	curl_setopt($hander, CURLOPT_PROXY, 'inet-proxy-a.appl.swissbank.com');
-	curl_setopt($hander, CURLOPT_PROXYPORT, 8080);
-	curl_setopt($hander, CURLOPT_PROXYUSERPWD, 'weicl:Ab123456');
+//	curl_setopt($hander, CURLOPT_PROXY, 'inet-proxy-a.appl.swissbank.com');
+//	curl_setopt($hander, CURLOPT_PROXYPORT, 8080);
+//	curl_setopt($hander, CURLOPT_PROXYUSERPWD, 'weicl:Ab123456');
 
 	curl_exec($hander);
 	curl_close($hander);
